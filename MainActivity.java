@@ -1,60 +1,99 @@
-package com.example.nav_draw;
+package com.example.app01;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.Menu;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
+        private TextView title, register, forgot;
+        private ImageView logoImageView;
+        private Button loginButton;
+        private EditText emailEdt, passwordEdt;
+        private FirebaseAuth mAuth;
+        private String email, password;
+        private final String TAG ="MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        logoImageView= findViewById(R.id.imageLogo);
+        //title= findViewById(R.id.title_text_view);
+        emailEdt= findViewById(R.id.edt_username);
+        loginButton= findViewById(R.id.btn_login);
+        passwordEdt= findViewById(R.id.edt_password);
+        /* register= findViewById(R.id.register_textView);
+        forgot= findViewById(R.id.forgot_pass_textView); */
+
+        mAuth = FirebaseAuth.getInstance();
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                String email= emailEdt.getText().toString();
+                String password= passwordEdt.getText().toString();
+                if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+                    Toast.makeText(getApplicationContext(),"Enter Email and Password",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    updateUI(user);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(MainActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
+
+                                // ...
+                            }
+                        });
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_profile, R.id.nav_college).setDrawerLayout(drawer).build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+
+    }
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            updateUI(currentUser);
+        }
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+
+    public void updateUI(FirebaseUser currentUser){
+        Intent profileIntent = new Intent(this, ProfileActivity.class);
+        profileIntent.putExtra("email", currentUser.getEmail());
+        startActivity(profileIntent);
+
+
     }
 }
