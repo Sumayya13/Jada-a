@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser currentUser) {
-        Intent profileIntent = new Intent(getApplicationContext(), FragmentNavigationView.class);
+        Intent profileIntent = new Intent(getApplicationContext(), HomeActivity.class);
         profileIntent.putExtra("email", currentUser.getEmail());
         Log.v("DATA", currentUser.getUid());
         startActivity(profileIntent);

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPostActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="ADD A NEW BOOK"
+                android:textColor="#4CAF50"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/bookImage"
+                android:layout_width="282dp"
+                android:layout_height="202dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/add_btn"
+                android:padding="0dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/heading"
+                tools:ignore="MissingConstraints,NotSibling"
+                tools:src="add_a_photo_24" />
+
+            <EditText
+                android:id="@+id/BookTitle"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+
+                android:hint=" Enter Book/Booklet Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.511"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookImage"
+                tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:hint=" Enter the book description "
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BookTitle"
+                tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/bookPrice"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:layout_marginTop="8dp"
+                android:hint=" Enter price "
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.534"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentRadioGroup"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="12dp"
+                android:layout_height="29dp"
+                android:hint=" Select book status: "
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="303dp" />
+
+
+            <RadioGroup
+                android:id="@+id/StatusRadioGroup"
+                android:layout_width="28dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/status">
+
+                <RadioButton
+                    android:id="@+id/radio_available"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:text="Available"
+                    tools:layout_editor_absoluteX="114dp"
+                    tools:layout_editor_absoluteY="371dp" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/paymentOption"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:hint="Would you rather get paid for the book or give it for free?"
+                android:textColorHint="#021703"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.564"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edition"
+                tools:ignore="MissingConstraints" />
+
+
+            <RadioGroup
+                android:id="@+id/paymentRadioGroup"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.534"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentOption">
+
+
+                <RadioButton
+                    android:id="@+id/radio_forFree"
+                    android:layout_width="143dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:text="Free" />
+
+                <RadioButton
+                    android:id="@+id/radio_getPaid"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Get paid" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:text="Choose the college that the book belongs to:"
+                android:textColor="#011902"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/mySpinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.564"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookPrice"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Spinner
+                android:id="@+id/mySpinner"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:layout_marginTop="608dp"
+                android:entries="@array/college"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.511"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints">
+
+            </Spinner>
+
+
+
+            <Button
+                android:id="@+id/post"
+                android:layout_width="132dp"
+                android:layout_height="57dp"
+                android:layout_marginTop="41dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#4CAF50"
+                android:text="Post"
+                android:textColor="@color/cardview_light_background"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/clear"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/mySpinner"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="132dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="96dp"
+                android:layout_marginRight="96dp"
+                android:layout_marginBottom="8dp"
+                android:background="#4CAF50"
+                android:text="Cancel"
+                android:textColor="@color/cardview_light_background"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <RadioButton
+                android:id="@+id/radio_unavailable"
+                android:layout_width="41dp"
+                android:layout_height="19dp"
+                android:layout_gravity="center"
+                android:text="Unavailable"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="386dp"
+                tools:layout_editor_absoluteY="334dp" />
+
+
+
+            <EditText
+                android:id="@+id/edition"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:ems="10"
+                android:hint="Enter the edition number"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.511"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/auther_name" />
+
+            <EditText
+                android:id="@+id/auther_name"
+                android:layout_width="280dp"
+                android:layout_height="41dp"
+                android:ems="10"
+                android:hint="Enter the author's name"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

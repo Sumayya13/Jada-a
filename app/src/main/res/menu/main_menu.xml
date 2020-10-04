@@ -13,30 +13,32 @@
             android:icon="@drawable/ic_baseline_account_circle_24"
             android:title="Profile" />
         <item
-            android:id="@+id/nav_College"
-            android:icon="@drawable/ic_baseline_college_24"
-            android:title="College" />
-
-        <item
-            android:id="@+id/nav_post"
+            android:id="@+id/nav_MyPost"
             android:icon="@drawable/ic_baseline_post_add_24"
             android:title="My Post" />
         <item
             android:id="@+id/nav_order"
             android:icon="@drawable/ic_baseline_order_24"
             android:title="My Order" />
+        <item
+            android:id="@+id/nav_heart"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="Favorite" />
     </group>
 
-    <group android:checkableBehavior="single">
+
         <item android:title="Other">
+
             <menu>
+                <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_out"
                     android:icon="@drawable/ic_baseline_out_24"
                     android:title="Log Out" />
+            </group>
             </menu>
         </item>
 
-    </group>
+
 
 </menu>
