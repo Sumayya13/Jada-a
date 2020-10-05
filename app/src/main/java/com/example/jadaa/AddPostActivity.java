@@ -46,6 +46,7 @@ public class AddPostActivity extends AppCompatActivity {
     private StorageReference mStorage;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
+    private String selectedItem ="";
 
 
     @Override
@@ -76,6 +77,7 @@ public class AddPostActivity extends AppCompatActivity {
         post = findViewById(R.id.post);
         Spinner college =(Spinner) findViewById(R.id.mySpinner);
         progressDialog = new ProgressDialog(this);
+
 
 
 
@@ -173,6 +175,8 @@ public class AddPostActivity extends AppCompatActivity {
                     newPost.child("Book Status").setValue(statusOption_val);
                     newPost.child("Book Price").setValue(price_val);
                     newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
+                    newPost.child("College").setValue(selectedItem);
+
 
 
                     progressDialog.dismiss();
