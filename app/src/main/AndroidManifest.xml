@@ -9,10 +9,16 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ViewMyPostActivity"></activity>
+        <activity android:name=".ViewPostActivity" />
+        <activity
+            android:name=".editActivity"
+            android:label="@string/title_activity_edit"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FavoriteActivity"
             android:label="@string/title_activity_favorite"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MyOrderActivity"
             android:label="@string/title_activity_my_order"

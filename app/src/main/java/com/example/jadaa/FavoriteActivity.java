@@ -1,11 +1,14 @@
 package com.example.jadaa;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -77,8 +80,29 @@ public class FavoriteActivity extends AppCompatActivity implements NavigationVie
                 startActivity(myOrder); break;
             case R.id.nav_heart: break;
             case R.id.nav_out:
-                Intent logout = new Intent(FavoriteActivity.this, MainActivity.class);
-                startActivity(logout); break;
+                android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
+                alertDialogBilder.setTitle("Log out");
+                alertDialogBilder.setMessage("Are you sure you want to log out?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+
+                                FirebaseAuth.getInstance().signOut();
+                                finish();
+                                Intent logout = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(logout);
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();break;
 
         }
         drawerLayout.closeDrawer(GravityCompat.START);

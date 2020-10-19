@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText phoneEditText, emailEditText;
     private ImageView picImageView;
     private TextView join;
-    private Button registerButton;
+    private TextView registerButton;
     private TextView registerTextView;
     private TextView loginTextView;
     private FirebaseDatabase database;
@@ -58,8 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.enterpass_edittext);
         confirmPassEditText = findViewById(R.id.confirmpass_edittext);
         emailEditText = findViewById(R.id.email_edittext);
-        picImageView = findViewById(R.id.pic_imageview);
-        join = findViewById(R.id.join_textview);
         registerButton = findViewById(R.id.register_button);
         loginTextView = findViewById(R.id.login_textview);
         registerTextView = findViewById(R.id.register_textview);
@@ -76,6 +74,8 @@ public class RegisterActivity extends AppCompatActivity {
                 confirmPass= confirmPassEditText.getText().toString().trim();
                 fullName = nameEditText.getText().toString().trim();
                 phone = phoneEditText.getText().toString().trim();
+
+
               /*  if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                     Toast.makeText(getApplicationContext(), "Enter email and password",
                             Toast.LENGTH_LONG).show();
@@ -201,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser){
         String keyId = mDatabase.push().getKey();
         assert keyId != null;
-        mDatabase.child(keyId).setValue(user); //adding user info to database
+        mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user); //adding user info to database
         Intent loginIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(loginIntent);
     }

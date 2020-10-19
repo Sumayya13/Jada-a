@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView registerTextView, forgetPassTextView;
     private EditText userEditText, passwordEditText;
     private ImageView logoImageView;
-    private Button loginButton;
+    private TextView loginButton;
     private String email, password;
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
@@ -45,12 +45,11 @@ public class MainActivity extends AppCompatActivity {
         forgetPassTextView = findViewById(R.id.forget_password_textview);
         userEditText = findViewById(R.id.emailogin_edittext);
         passwordEditText = findViewById(R.id.password_edittext);
-        logoImageView = findViewById(R.id.imageView);
         loginButton = findViewById(R.id.button);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World!");
+      //  FirebaseDatabase database = FirebaseDatabase.getInstance();
+      //  DatabaseReference myRef = database.getReference("message");
+      //  myRef.setValue("Hello, World!");
 
         //checking if user is logged in
         if (mAuth.getCurrentUser() != null) {
