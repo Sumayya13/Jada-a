@@ -3,7 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/logo_header"
-    android:gravity="bottom">
+    android:background="@drawable/ic_wave_3"
+ >
+
+
 
 </LinearLayout>
+

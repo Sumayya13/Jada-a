@@ -16,6 +16,7 @@
 
     <!-- TODO: drop down list in add post page  -->
     <string-array name="college">
+        <item>Choose College</item>
         <item>College of Computer and Information Sciences</item>
         <item>College of Engineering</item>
         <item>College of Science</item>
@@ -51,6 +52,7 @@
     <string name="title_activity_my_post">My Post</string>
     <string name="title_activity_my_order">My Order</string>
     <string name="title_activity_favorite">Favorite</string>
+    <string name="title_activity_edit">editActivity</string>
 
 
 </resources>

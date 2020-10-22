@@ -6,25 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MyOrderActivity"
     android:id="@+id/drawer_layout"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+  >
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="@drawable/pup"
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
+            android:theme="@style/AppTheme1"
             android:visibility="visible"
             app:navigationIcon="@drawable/menu_24"
-            tools:ignore="MissingConstraints" />
-
+            app:titleTextColor="#FFFFFF"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="3dp" />
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
