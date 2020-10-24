@@ -26,7 +26,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
    // String uid,pTitle,pDescription,pAuthor,pEdition,pImage,pPrice,pStatus,pCollege,pDate,pTime,pPublisher;
     Context context;
     List<ModelPost> postList;
-    String pImage;
+
 
     public AdapterPosts(Context context, List<ModelPost> postList) {
         this.context = context;
@@ -50,7 +50,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         final String pDescription = postList.get(i).getBookDescription();
         final String pAuthor = postList.get(i).getBookAuthor();
         final String pEdition = postList.get(i).getBookEdition();
-        pImage = (postList.get(i).getBookImage());
+        final String pImage = (postList.get(i).getBookImage());
         final String pPrice = postList.get(i).getBookPrice();
         final String pStatus = postList.get(i).getBookStatus();
         final String pCollege = postList.get(i).getCollege();
@@ -61,30 +61,25 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);
-        myHolder.pDescriptionTv.setText(pDescription);
+
+
+        if (pPrice.equals("0"))
+            myHolder.pDescriptionTv.setText("Book is free");
+        else
+            myHolder.pDescriptionTv.setText(pPrice+" RAS");
+
+
        //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
 
         //set post image
         //String url = pImage;
-
-
-
-        try{
-
-            //  Picasso.get().load(pImage).into(myHolder.pImageIv);
-            Picasso.get().load(pImage).into(myHolder.pImageIv);
-           // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
-        }
-        catch (Exception e){
-        }
-
-
         myHolder.pTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // move data to ViewPostActivity page to view
                 Intent viewSingle = new Intent(context, ViewPostActivity.class);
                 viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage",pImage);
                 viewSingle.putExtra("pDescription", pDescription);
                 viewSingle.putExtra("pAuthor", pAuthor);
                 viewSingle.putExtra("pEdition", pEdition);
@@ -95,7 +90,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 viewSingle.putExtra("pTime", pTime);
                 viewSingle.putExtra("pPublisher", pPublisher);
                 viewSingle.putExtra("uid", uid);
-               // viewSingle.putExtra("pId", pId);
+                viewSingle.putExtra("pId", pId);
 
                 context.startActivity(viewSingle);
             }
@@ -107,6 +102,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 // move data to ViewPostActivity page to view
                 Intent viewSingle = new Intent(context, ViewPostActivity.class);
                 viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage",pImage);
                 viewSingle.putExtra("pDescription", pDescription);
                 viewSingle.putExtra("pAuthor", pAuthor);
                 viewSingle.putExtra("pEdition", pEdition);
@@ -117,7 +113,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 viewSingle.putExtra("pTime", pTime);
                 viewSingle.putExtra("pPublisher", pPublisher);
                 viewSingle.putExtra("uid", uid);
-              viewSingle.putExtra("pId", pId);
+                viewSingle.putExtra("pId", pId);
 
                 context.startActivity(viewSingle);
             }
@@ -130,6 +126,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 // move data to ViewPostActivity page to view
                 Intent viewSingle = new Intent(context, ViewPostActivity.class);
                 viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage", pImage);
                 viewSingle.putExtra("pDescription", pDescription);
                 viewSingle.putExtra("pAuthor", pAuthor);
                 viewSingle.putExtra("pEdition", pEdition);
@@ -140,11 +137,23 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 viewSingle.putExtra("pTime", pTime);
                 viewSingle.putExtra("pPublisher", pPublisher);
                 viewSingle.putExtra("uid", uid);
-             //   viewSingle.putExtra("pId", pId);
+                viewSingle.putExtra("pId", pId);
 
                 context.startActivity(viewSingle);
             }
         });
+
+
+        try{
+            //  Picasso.get().load(pImage).into(myHolder.pImageIv);
+            Picasso.get().load(pImage).into(myHolder.pImageIv);
+           // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+        }
+        catch (Exception e){
+        }
+
+
+
 
 
     }

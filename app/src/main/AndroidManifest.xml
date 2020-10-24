@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jadaa">
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_logo"
@@ -9,8 +15,8 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ViewPostActivity"></activity>
-        <!-- android:theme="@style/AppTheme" -->
+
+        <activity android:name=".ViewPostActivity" /> <!-- android:theme="@style/AppTheme" -->
         <activity android:name=".ViewMyPostActivity" />
         <activity
             android:name=".editActivity"

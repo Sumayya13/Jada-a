@@ -1,3 +1,4 @@
+
 package com.example.jadaa;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class ViewPostActivity extends AppCompatActivity {
 
@@ -42,7 +45,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
         //init views
         uPictureIv =findViewById(R.id.uPictureIv);
-        pImageIv = findViewById(R.id.pImageIv);
+        pImageIv = findViewById(R.id.bookImage);
         uNameTv = (TextView)findViewById(R.id.uNameTv);
         pTimeTv =(TextView) findViewById(R.id.pTimeTv);
         pTitle =(TextView) findViewById(R.id.BookTitle);
@@ -55,29 +58,30 @@ public class ViewPostActivity extends AppCompatActivity {
 
 
 
+
         Bundle extras = getIntent().getExtras();
-        String title;
-        title =  " "+extras.getString("pTitle");
-        // message.setContent(title, "text/html; charset=utf-8");
-
-
-        //    if (extras != null)
-        pTitle.setText(title);
+        pTitle.setText( " "+extras.getString("pTitle"));
         pDescriptionTv.setText(" "+extras.getString("pDescription"));
         auther_name.setText(  " by "+extras.getString("pAuthor"));
         edition.setText( " Edition "+extras.getString("pEdition"));
+
+        String uri =extras.getString("pImage");
         //owner.setText( extras.getString("pPublisher"));
+        try{
+            //  Picasso.get().load(pImage).into(myHolder.pImageIv);
+            Picasso.get().load(uri).into(pImageIv);
+            // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+        }
+        catch (Exception e){
+        }
 
 
-
-        //String someHtmlMessage = "Hello this is test message <b style='color:blue;'>bold color</b>";
-        //message.setContent(someHtmlMessage, "text/html; charset=utf-8");
 
 
         if ( extras.getString("pPrice").equals("0"))
             bookPrice.setText("Book is free");
         else
-            bookPrice.setText(" "+extras.getString("pPrice")+" RS");
+            bookPrice.setText(" "+extras.getString("pPrice")+" RAS");
         //
         //
         college.setText( " "+extras.getString("pCollege"));
@@ -114,3 +118,4 @@ public class ViewPostActivity extends AppCompatActivity {
 
     }
 }
+

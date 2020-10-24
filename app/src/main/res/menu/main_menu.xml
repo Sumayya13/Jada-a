@@ -24,6 +24,7 @@
             android:id="@+id/nav_heart"
             android:icon="@drawable/ic_baseline_favorite_24"
             android:title="Favorite" />
+
     </group>
 
 

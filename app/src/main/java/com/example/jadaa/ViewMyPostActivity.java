@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class ViewMyPostActivity extends AppCompatActivity {
 
     @Override
@@ -41,7 +43,7 @@ public class ViewMyPostActivity extends AppCompatActivity {
 
         //init views
         uPictureIv =findViewById(R.id.uPictureIv);
-        pImageIv = findViewById(R.id.pImageIv);
+        pImageIv = findViewById(R.id.bookImage);
         uNameTv = (TextView)findViewById(R.id.uNameTv);
         pTimeTv =(TextView) findViewById(R.id.pTimeTv);
         pTitle =(TextView) findViewById(R.id.BookTitle);
@@ -50,21 +52,29 @@ public class ViewMyPostActivity extends AppCompatActivity {
         edition =(TextView) findViewById(R.id.edition);
         college=(TextView) findViewById(R.id.college);
         bookPrice=(TextView) findViewById(R.id.bookPrice);
-       // owner=(TextView) findViewById(R.id.owner);
+        // owner=(TextView) findViewById(R.id.owner);
 
         Bundle extras = getIntent().getExtras();
         String title;
         title =  " "+extras.getString("pTitle");
-       // message.setContent(title, "text/html; charset=utf-8");
+        // message.setContent(title, "text/html; charset=utf-8");
 
 
-    //    if (extras != null)
+        //    if (extras != null)
         pTitle.setText(title);
         pDescriptionTv.setText(" "+extras.getString("pDescription"));
         auther_name.setText(  " by "+extras.getString("pAuthor"));
         edition.setText( " Edition "+extras.getString("pEdition"));
-       //owner.setText( extras.getString("pPublisher"));
+        String uri =extras.getString("pImage");
+        //owner.setText( extras.getString("pPublisher"));
 
+        try{
+            //  Picasso.get().load(pImage).into(myHolder.pImageIv);
+            Picasso.get().load(uri).into(pImageIv);
+            // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+        }
+        catch (Exception e){
+        }
 
 
         //String someHtmlMessage = "Hello this is test message <b style='color:blue;'>bold color</b>";
@@ -73,14 +83,15 @@ public class ViewMyPostActivity extends AppCompatActivity {
 
         if ( extras.getString("pPrice").equals("0"))
             bookPrice.setText("Book is free");
-      else
-        bookPrice.setText(" "+extras.getString("pPrice")+" RS");
-      //
+        else
+            bookPrice.setText(" "+extras.getString("pPrice")+" RAS");
+        //
         //
         college.setText( " "+extras.getString("pCollege"));
-     //   pTitle.setText( extras.getString("pPublisher"));
-            // and get whatever type user account id is
+        //   pTitle.setText( extras.getString("pPublisher"));
+        // and get whatever type user account id is
 
 
     }// on Create
 }
+

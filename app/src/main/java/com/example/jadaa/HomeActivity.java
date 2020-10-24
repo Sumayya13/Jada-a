@@ -10,6 +10,7 @@ import com.example.jadaa.models.ModelPost;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,10 +112,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
     }// on create
 
     private void loadPosts() {
+     final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
         // path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
         //get all from this
@@ -124,12 +125,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
                     ModelPost modelPost = ds.getValue(ModelPost.class);
-                    postList.add(modelPost);
-                    //adapter
-                    adapterPosts = new AdapterPosts(HomeActivity.this, postList);
-                    //set adapter to recycler view
-                    recyclerView.setAdapter(adapterPosts);
-                    adapterPosts.notifyDataSetChanged();
+                    if (!modelPost.getUid().equals(thisUser.getUid())) {
+                        postList.add(modelPost);
+                        //adapter
+                        adapterPosts = new AdapterPosts(HomeActivity.this, postList);
+                        //set adapter to recycler view
+                        recyclerView.setAdapter(adapterPosts);
+                        adapterPosts.notifyDataSetChanged();
+                    }
                 }
             }
 

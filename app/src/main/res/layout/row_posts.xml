@@ -29,7 +29,7 @@
                 android:id="@+id/uPictureIv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/boy_avatar"
+                android:src="@drawable/user1"
                 android:layout_margin="5dp"
                 android:scaleType="centerCrop">
         </de.hdodenhof.circleimageview.CircleImageView>

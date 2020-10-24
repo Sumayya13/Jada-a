@@ -1,7 +1,9 @@
 package com.example.jadaa.adapters;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jadaa.AddPostActivity;
 import com.example.jadaa.HomeActivity;
+import com.example.jadaa.MainActivity;
+import com.example.jadaa.MyPostActivity;
 import com.example.jadaa.R;
 import com.example.jadaa.ViewMyPostActivity;
 import com.example.jadaa.ViewPostActivity;
@@ -24,6 +28,7 @@ import com.example.jadaa.models.ModelMyPost;
 import com.example.jadaa.models.ModelPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -63,7 +68,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         final String pDescription = postList.get(i).getBookDescription();
         final String pAuthor = postList.get(i).getBookAuthor();
         final String pEdition = postList.get(i).getBookEdition();
-       final String pImage = (postList.get(i).getBookImage());
+        final String pImage = (postList.get(i).getBookImage());
         final String pPrice = postList.get(i).getBookPrice();
         final String pStatus = postList.get(i).getBookStatus();
         final String pCollege = postList.get(i).getCollege();
@@ -74,11 +79,87 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);
-        myHolder.pDescriptionTv.setText(pDescription);
+
+
+        if (pPrice.equals("0"))
+            myHolder.pDescriptionTv.setText("Book is free");
+        else
+            myHolder.pDescriptionTv.setText(pPrice+" RAS");
+
+
        //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
 
+
+        myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // move data to ViewPostActivity page to view
+                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
+                viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage", pImage);
+                viewSingle.putExtra("pDescription", pDescription);
+                viewSingle.putExtra("pAuthor", pAuthor);
+                viewSingle.putExtra("pEdition", pEdition);
+                viewSingle.putExtra("pPrice", pPrice);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pCollege", pCollege);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("pPublisher",pPublisher);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("pId", pId);
+
+                context.startActivity(viewSingle);
+            }
+        });
+
+
+        myHolder.pDescriptionTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // move data to ViewPostActivity page to view
+                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
+                viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage", pImage);
+                viewSingle.putExtra("pDescription", pDescription);
+                viewSingle.putExtra("pAuthor", pAuthor);
+                viewSingle.putExtra("pEdition", pEdition);
+                viewSingle.putExtra("pPrice", pPrice);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pCollege", pCollege);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("pPublisher", pPublisher);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("pId", pId);
+
+                context.startActivity(viewSingle);
+            }
+        });
         //set post image
         //String url = pImage;
+        myHolder.pTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // move data to ViewPostActivity page to view
+                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
+                viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage", pImage);
+                viewSingle.putExtra("pDescription", pDescription);
+                viewSingle.putExtra("pAuthor", pAuthor);
+                viewSingle.putExtra("pEdition", pEdition);
+                viewSingle.putExtra("pPrice", pPrice);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pCollege", pCollege);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("pPublisher",pPublisher);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("pId", pId);
+
+                context.startActivity(viewSingle);
+            }
+        });
 
 
 
@@ -94,10 +175,26 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
 
 
 
-// strt delete post
+// strt delete post it's work
         myHolder.moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(context);
+                alertDialogBilder.setTitle("delete post");
+                alertDialogBilder.setMessage("Are you sure you want to delete this post?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+
 
                                 Query fquery = FirebaseDatabase.getInstance().getReference("Posts").orderByChild("pId").equalTo(pId);
                                 fquery.addValueEventListener(new ValueEventListener() {
@@ -116,12 +213,24 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
                                     }
                                 });
 
+
+
+
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();
+
+
+
+
                             }
 
 
 
         });// end delete post
-
 
 
 
@@ -173,83 +282,12 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
                 });
             }
         });// end delete post
+
+
 */
 
 
 
-
-
-
-
-
-
-
-        myHolder.pTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // move data to ViewPostActivity page to view
-                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
-                viewSingle.putExtra("pTitle", pTitle);
-                viewSingle.putExtra("pDescription", pDescription);
-                viewSingle.putExtra("pAuthor", pAuthor);
-                viewSingle.putExtra("pEdition", pEdition);
-                viewSingle.putExtra("pPrice", pPrice);
-                viewSingle.putExtra("pStatus", pStatus);
-                viewSingle.putExtra("pCollege", pCollege);
-                viewSingle.putExtra("pDate", pDate);
-                viewSingle.putExtra("pTime", pTime);
-                viewSingle.putExtra("pPublisher",pPublisher);
-                viewSingle.putExtra("uid", uid);
-                viewSingle.putExtra("pId", pId);
-
-                context.startActivity(viewSingle);
-            }
-        });
-
-        myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // move data to ViewPostActivity page to view
-                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
-                viewSingle.putExtra("pTitle", pTitle);
-                viewSingle.putExtra("pDescription", pDescription);
-                viewSingle.putExtra("pAuthor", pAuthor);
-                viewSingle.putExtra("pEdition", pEdition);
-                viewSingle.putExtra("pPrice", pPrice);
-                viewSingle.putExtra("pStatus", pStatus);
-                viewSingle.putExtra("pCollege", pCollege);
-                viewSingle.putExtra("pDate", pDate);
-                viewSingle.putExtra("pTime", pTime);
-                viewSingle.putExtra("pPublisher",pPublisher);
-                viewSingle.putExtra("uid", uid);
-                viewSingle.putExtra("pId", pId);
-
-                context.startActivity(viewSingle);
-            }
-        });
-
-
-        myHolder.pDescriptionTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // move data to ViewPostActivity page to view
-                Intent viewSingle = new Intent(context, ViewMyPostActivity.class);
-                viewSingle.putExtra("pTitle", pTitle);
-                viewSingle.putExtra("pDescription", pDescription);
-                viewSingle.putExtra("pAuthor", pAuthor);
-                viewSingle.putExtra("pEdition", pEdition);
-                viewSingle.putExtra("pPrice", pPrice);
-                viewSingle.putExtra("pStatus", pStatus);
-                viewSingle.putExtra("pCollege", pCollege);
-                viewSingle.putExtra("pDate", pDate);
-                viewSingle.putExtra("pTime", pTime);
-                viewSingle.putExtra("pPublisher", pPublisher);
-                viewSingle.putExtra("uid", uid);
-                viewSingle.putExtra("pId", pId);
-
-                context.startActivity(viewSingle);
-            }
-        });
 
     }//onCreate
 

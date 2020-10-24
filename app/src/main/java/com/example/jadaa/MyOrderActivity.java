@@ -59,7 +59,6 @@ public class MyOrderActivity extends AppCompatActivity implements NavigationView
     }//onCreate
 
 
-
     /*---------------------to Open or close Navigation ------------------------*/
     public void onBackPressed(){
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
