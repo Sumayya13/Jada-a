@@ -22,15 +22,19 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -111,7 +115,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
     }// on create
 
     private void loadPosts() {
@@ -145,6 +148,99 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+
+    //method search later
+    private void searchPosts(final String searchQuery){
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();// to show other post
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+        //get all from this
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds: snapshot.getChildren() ){
+                    ModelPost modelPost = ds.getValue(ModelPost.class);
+
+
+                    if(!modelPost.getUid().equals(thisUser.getUid())){
+                    if(modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookAuthor().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getCollege().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPostDate().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPostTime().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPublisher().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookEdition().toLowerCase().contains(searchQuery.toLowerCase())||
+                            (searchQuery.toLowerCase().equals("free")&& modelPost.getBookPrice().toLowerCase().equals("0"))
+
+                    ){
+                        postList.add(modelPost);
+                    }}
+
+                    //adapter
+                    adapterPosts = new AdapterPosts(HomeActivity.this,postList);
+                    //set adapter to recycler view
+                    recyclerView.setAdapter(adapterPosts);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //in case of error
+                Toast.makeText(HomeActivity.this,""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        MenuItem item = menu.findItem(R.id.serch_view);
+        SearchView searchView =(SearchView) MenuItemCompat.getActionView(item);
+        //search listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //call when user press search button
+                if(!TextUtils.isEmpty(query)){
+                    searchPosts(query);
+                }
+                else{
+                    loadPosts();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //called as ans when user press any letter
+                if(!TextUtils.isEmpty(newText)){
+                    searchPosts(newText);
+                }
+                else{
+                    loadPosts();
+                }
+
+                return false;
+            }
+        });
+        return true;
+
+
+    }
+
+
+
+
+
+
     /*---------------------to Open or close Navigation ------------------------*/
     public void onBackPressed(){
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -156,8 +252,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // to move to page when click
-    @Override
+    @Override      // to move to page when click
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home: break;

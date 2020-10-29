@@ -32,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity  {
     private EditText nameEditText, passwordEditText, confirmPassEditText;
     private EditText phoneEditText, emailEditText;
    // Toolbar toolbar;
-
+String name ,phone1 ,email1; ///////////////////////////////////
     // private String email ;
     // private static final String USERS = "users";
 
@@ -78,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
 // to undo to previose
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Profile");
 
@@ -105,9 +106,9 @@ public class ProfileActivity extends AppCompatActivity  {
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     //get Data
-                    String name = "" + ds.child("fullName").getValue();
-                    String phone1 = "" + ds.child("phone").getValue();
-                    String email1 = "" + ds.child("email").getValue();
+                    name = "" + ds.child("fullName").getValue();
+                    phone1 = "" + ds.child("phone").getValue();
+                    email1 = "" + ds.child("email").getValue();
 
                     //set data
                     Name.setText(name.toString());
@@ -126,8 +127,13 @@ public class ProfileActivity extends AppCompatActivity  {
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this, editActivity.class));
+            public void onClick(View view) { //////////////////////////////////////////////////
+
+                Intent profileIntent = new Intent(getApplicationContext(), editActivity.class);
+                profileIntent.putExtra("fullName", name);
+                profileIntent.putExtra("phone", phone1);
+                profileIntent.putExtra("email", email1);
+                startActivity(profileIntent);
             }
         });
 
@@ -135,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
         /*---------------------Navigation------------------------*/
-  /*      navigationView.bringToFront();
+   /*   navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -143,7 +149,6 @@ public class ProfileActivity extends AppCompatActivity  {
         navigationView.setNavigationItemSelectedListener(this);
         // send this page
         navigationView.setCheckedItem(R.id.nav_Profile);
-
 */
 
 
@@ -151,7 +156,65 @@ public class ProfileActivity extends AppCompatActivity  {
 
     }//onCreate
 
+/*
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home: break;
+            case R.id.nav_Profile:
+                Intent profile = new Intent(ProfileActivity.this, ProfileActivity.class);
+                startActivity(profile); break;
+            case R.id.nav_MyPost:
+                Intent myPost = new Intent(ProfileActivity.this, MyPostActivity.class);
+                startActivity(myPost); break;
+            case R.id.nav_order:
+                Intent myOrder = new Intent(ProfileActivity.this, MyOrderActivity.class);
+                startActivity(myOrder); break;
+            case R.id.nav_heart:
+                Intent favorite = new Intent(ProfileActivity.this, FavoriteActivity.class);
+                startActivity(favorite); break;
+            case R.id.nav_out:{
+                android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
+                alertDialogBilder.setTitle("Log out");
+                alertDialogBilder.setMessage("Are you sure you want to log out?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+
+                                FirebaseAuth.getInstance().signOut();
+                                finish();
+                                Intent logout = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(logout);
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();break;
+            }}
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
 
 
 
+ */
 }
