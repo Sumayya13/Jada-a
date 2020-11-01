@@ -307,7 +307,10 @@ public class AddPostActivity extends AppCompatActivity {
                                 hashMap.put("pTime", timeStamp);
                                 hashMap.put("PostDate", saveCurrentDate);
                                 hashMap.put("PostTime", saveCurrentTime);
+                                hashMap.put("BuyerID","");
+                                hashMap.put("PurchaserID","");
 
+                                
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
                                 //put data in this ref
                                 ref.child(timeStamp).setValue(hashMap)

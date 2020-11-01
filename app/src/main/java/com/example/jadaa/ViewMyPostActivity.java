@@ -84,7 +84,7 @@ public class ViewMyPostActivity extends AppCompatActivity {
         if ( extras.getString("pPrice").equals("0"))
             bookPrice.setText("Book is free");
         else
-            bookPrice.setText(" "+extras.getString("pPrice")+" RAS");
+            bookPrice.setText(" "+extras.getString("pPrice")+" SAR");
         //
         //
         college.setText( " "+extras.getString("pCollege"));

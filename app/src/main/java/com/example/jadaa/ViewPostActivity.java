@@ -3,20 +3,44 @@ package com.example.jadaa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
-import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.jadaa.Config.Config;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
+import java.math.BigDecimal;
+
 public class ViewPostActivity extends AppCompatActivity {
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this,PayPalService.class));
+        super.onDestroy();
+
+    }
+
 
 
     @Override
@@ -31,6 +55,8 @@ public class ViewPostActivity extends AppCompatActivity {
         final TextView uNameTv, pTimeTv, pTitle, pDescriptionTv,auther_name,edition,college,bookPrice,owner;
         ImageButton moreBtn;
         Button favoriteBtn, commentBtn, shareBtn, buy;
+        final String pid; // to pay this amount
+        final String title,des,price,pAuth,uid,pStatus,pImage,pDate,pTime;
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -45,6 +71,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 finish();
             }
         });
+        
 
 
         //init views
@@ -65,10 +92,16 @@ public class ViewPostActivity extends AppCompatActivity {
 
         final Bundle extras = getIntent().getExtras();
 
+        title = extras.getString("pTitle");
+        des = extras.getString("pDescription");
+        pid = extras.getString("pId");
+        pAuth =extras.getString("pAuthor");
+        price =extras.getString("pPrice");
+        pStatus = extras.getString("pStatus");
+        pDate = extras.getString("pDate");
+        pTime= extras.getString("pTime");
+        uid= extras.getString("uid");
 
-        String title = extras.getString("pTitle");
-        String des = extras.getString("pDescription");
-        final String pid = extras.getString("pId");
 
         pTitle.setText( " "+extras.getString("pTitle"));
         pDescriptionTv.setText(" "+extras.getString("pDescription"));
@@ -91,6 +124,7 @@ public class ViewPostActivity extends AppCompatActivity {
         }
 
 
+      //  price = extras.getString("pPrice"); // to sent to payment system
 
 
         if ( extras.getString("pPrice").equals("0"))
@@ -119,7 +153,7 @@ public class ViewPostActivity extends AppCompatActivity {
          اذ الكتاب له غيرمجاني اودي المستخدم للGoogle pay
 
          الحالة الأولى/ اذا تم دفع المبلغ بنجاح
-        اغير حالة الكتاب في الداتابيس من متاح ل تم بيعه  available to purched
+        اغير حالة الكتاب في الداتابيس من متاح ل تم بيعه  available to sold
          اعرض له رسالة تم الشراء بنجاح واعرض الكتاب في MyOrder page
          اعدل الصفحة الرئيسية  واخليها تعرض الكتب المتاحة فقط
          انبه البائع ان في شخص طلب الكتاب واعطيه بيانات الزبون (جواله واسمه)
@@ -131,11 +165,57 @@ public class ViewPostActivity extends AppCompatActivity {
 
          */
 
-        final String price = extras.getString("pPrice");
+
+
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pay = new Intent(getApplicationContext(), googlePay.class);
+
+                final Bundle extras = getIntent().getExtras();
+
+                String title = extras.getString("pTitle");
+                String des = extras.getString("pDescription");
+                String pid = extras.getString("pId");
+                String pAuth =extras.getString("pAuthor");
+                String price =extras.getString("pPrice");
+                String pStatus = extras.getString("pStatus");
+                String pDate = extras.getString("pDate");
+                String pTime= extras.getString("pTime");
+                String uid= extras.getString("uid");
+
+
+                Intent viewSingle = new Intent(getApplicationContext(), PaypalActivity.class);
+                viewSingle.putExtra("pTitle", title);
+                viewSingle.putExtra("pDescription", des);
+                viewSingle.putExtra("pAuthor", pAuth);
+                viewSingle.putExtra("pPrice", price);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("pId", pid);
+
+           startActivity(viewSingle);
+                }
+
+
+    });
+
+    }// onCreate
+
+
+
+
+
+
+
+
+}// class
+
+
+
+
+//    Intent pay = new Intent(getApplicationContext(), googlePay.class);
                /*
                 Bundle extras = getIntent().getExtras();
                 pTitle.setText( " "+extras.getString("pTitle"));
@@ -143,11 +223,10 @@ public class ViewPostActivity extends AppCompatActivity {
                 auther_name.setText(  " by "+extras.getString("pAuthor"));
                 edition.setText( " Edition "+extras.getString("pEdition"));
 */
-                pay.putExtra("pPrice",price);
-                pay.putExtra("pId",pid);
-                startActivity(pay);
-            }
-        });
+             //   pay.putExtra("pPrice",price);
+             //   pay.putExtra("pId",pid);
+              //  startActivity(pay);
+
 
 
 
@@ -178,7 +257,4 @@ public class ViewPostActivity extends AppCompatActivity {
 
 
 
-
-    }
-}
 

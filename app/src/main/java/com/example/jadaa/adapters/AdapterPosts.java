@@ -66,7 +66,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         if (pPrice.equals("0"))
             myHolder.pDescriptionTv.setText("Book is free");
         else
-            myHolder.pDescriptionTv.setText(pPrice+" RAS");
+            myHolder.pDescriptionTv.setText(pPrice+" SAR");
 
 
        //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));

@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/bookImage"
-        android:layout_width="255dp"
-        android:layout_height="157dp"
+        android:layout_width="213dp"
+        android:layout_height="147dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="20dp"
@@ -45,9 +45,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.571"
-        tools:ignore="MissingConstraints,NotSibling"
-        tools:src="@drawable/ic_baseline_menu_book_24" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints,NotSibling" />
 
     <View
         android:id="@+id/view"
@@ -58,177 +57,199 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="412dp"
+        android:layout_height="454dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/BookTitle"
-        android:background="@drawable/custom_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
+        android:background="@drawable/custom_input"
         android:drawablePadding="16dp"
         android:ems="10"
+        android:paddingTop="12dp"
         android:hint="Title"
         android:inputType="textPersonName"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/custom_input"
-        android:drawablePadding="16dp"
-        android:ems="10"
-        android:hint="Description"
-        android:inputType="textPersonName|textMultiLine"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BookTitle" />
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@drawable/custom_input"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="Description"
+                android:inputType="textPersonName|textMultiLine"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BookTitle" />
 
-    <EditText
-        android:id="@+id/auther_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/custom_input"
-        android:drawablePadding="16dp"
-        android:ems="10"
-        android:hint="Auther"
-        android:inputType="textPersonName"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
-
-
-    <EditText
-        android:id="@+id/edition"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/custom_input"
-        android:drawablePadding="16dp"
-        android:ems="10"
-        android:hint="Edition"
-        android:inputType="phone"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/auther_name" />
-
-    <EditText
-        android:id="@+id/bookPrice"
-        android:background="@drawable/custom_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:drawablePadding="16dp"
-        android:ems="10"
-        android:hint="Price"
-        android:inputType="phone"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentRadioGroup" />
+            <EditText
+                android:id="@+id/auther_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@drawable/custom_input"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="Auther"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description" />
 
 
-    <RadioGroup
-        android:id="@+id/paymentRadioGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edition">
+            <EditText
+                android:id="@+id/edition"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@drawable/custom_input"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="Edition"
+                android:inputType="phone"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/auther_name" />
 
-        <RadioButton
-            android:id="@+id/radio_forFree"
-            android:layout_width="143dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-black"
-            android:text="Free"
-            android:buttonTint="#997BA9"
-            android:textColor="#997BA9"
-            android:textSize="20dp" />
-
-        <RadioButton
-            android:id="@+id/radio_getPaid"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="0dp"
-            android:checked="true"
-            android:fontFamily="sans-serif-black"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:text="Get paid"
-            android:buttonTint="#997BA9"
-            android:textColor="#997BA9"
-            android:textSize="20dp" />
-
-    </RadioGroup>
+            <EditText
+                android:id="@+id/bookPrice"
+                android:background="@drawable/custom_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="Price"
+                android:inputType="phone"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentRadioGroup" />
 
 
-    <Spinner
-        android:id="@+id/mySpinner"
-        android:layout_width="341dp"
-        android:layout_height="33dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/round_pink"
-        android:color="#F9F9F9"
-        android:drawablePadding="16dp"
-        android:entries="@array/college"
-        android:fontFamily="sans-serif-black"
-        android:gravity="center_horizontal"
-        android:outlineAmbientShadowColor="#FFFBFB"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#BCF6EEEE"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bookPrice"></Spinner>
+            <RadioGroup
+                android:id="@+id/paymentRadioGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edition">
+
+                <RadioButton
+                    android:id="@+id/radio_forFree"
+                    android:layout_width="143dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Free"
+                    android:buttonTint="#997BA9"
+                    android:textColor="#997BA9"
+                    android:textSize="20dp" />
+
+                <RadioButton
+                    android:id="@+id/radio_getPaid"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:checked="true"
+                    android:fontFamily="sans-serif-black"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:text="Get paid"
+                    android:buttonTint="#997BA9"
+                    android:textColor="#997BA9"
+                    android:textSize="20dp" />
+
+            </RadioGroup>
+
+
+            <Spinner
+                android:id="@+id/mySpinner"
+                android:layout_width="330dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@drawable/round_pink"
+                android:color="#F9F9F9"
+                android:drawablePadding="16dp"
+                android:entries="@array/college"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center_horizontal"
+                android:outlineAmbientShadowColor="#FFFBFB"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#BCF6EEEE"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookPrice"></Spinner>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/post"
@@ -237,6 +258,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/round__bourder"
@@ -247,7 +269,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mySpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.079" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     <!--

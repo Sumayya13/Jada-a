@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class googlePay extends AppCompatActivity {
 
     public static final String GPAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
-    EditText name, upiId, amount, note;
-    TextView msg;
+    EditText name, upiId ,note;
+    TextView msg , amount ;
     Button pay;
     Uri uri;
     String approvalRefNo;
@@ -36,7 +36,7 @@ public class googlePay extends AppCompatActivity {
         name = findViewById(R.id.name);
         upiId = findViewById(R.id.upi_id);
         amount = findViewById(R.id.amount);
-        note = findViewById(R.id.transaction_note);
+       note = findViewById(R.id.transaction_note);
 
         msg = findViewById(R.id.status);
         pay = findViewById(R.id.pay);
@@ -129,7 +129,7 @@ public class googlePay extends AppCompatActivity {
 
         else{
             Toast.makeText(googlePay.this, "Transaction cancelled or failed please try again.", Toast.LENGTH_SHORT).show();
-            msg.setText("Transaction Failed of ₹" + sendAmount);
+            msg.setText("Transaction Failed of " + sendAmount);
             msg.setTextColor(Color.RED);
         }
 

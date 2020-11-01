@@ -29,7 +29,7 @@
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="409dp"
-        android:layout_height="550dp"
+        android:layout_height="650dp"
         android:scrollbarStyle="insideInset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="700dp">
+                android:layout_height="600dp">
 
                 <ImageView
                     android:id="@+id/bookImage"
@@ -212,26 +212,25 @@
         </LinearLayout>
     </ScrollView>
 
+
     <Button
         android:id="@+id/buy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="341dp"
+        android:layout_height="42dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="43dp"
         android:background="@drawable/round__bourder"
-        android:text="Buy"
+        android:drawableLeft="@drawable/py3"
+        android:text="Buy using paypal"
         android:textColor="#2196F3"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroll"
-        app:layout_constraintVertical_bias="0.866"
         tools:ignore="Suspicious0dp" />
 
 
