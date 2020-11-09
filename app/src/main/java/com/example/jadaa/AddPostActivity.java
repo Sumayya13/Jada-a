@@ -2,6 +2,7 @@ package com.example.jadaa;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -17,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -53,6 +55,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -240,8 +243,6 @@ public class AddPostActivity extends AppCompatActivity {
                 String bookAuthor_val = BookAuthor.getText().toString().trim();
                 String bookEdition_val = BookEdition.getText().toString().trim();
 
-                checkEnteredData();
-
                 if(radioForFree.isChecked()){
                     price_val = "0";
                     bookPrice.setVisibility(View.GONE);
@@ -265,6 +266,9 @@ public class AddPostActivity extends AppCompatActivity {
                     description.setError("Book description is required!");
                 }
 
+               if(!checkEnteredData()) {
+                   return;
+               }
 
                 if(isUpdateKey.equals("editPost")){
                     beginUpdate(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
@@ -409,6 +413,7 @@ public class AddPostActivity extends AppCompatActivity {
         //get the details of post using the post id
         Query fquery = reference.orderByChild("pId").equalTo(editPostId);
         fquery.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
@@ -440,12 +445,15 @@ public class AddPostActivity extends AppCompatActivity {
                     }
 
                     //set college
-                 /*   for(int i=1; i<= 20; i++){
-                        if(editCollege.equals(college.getItemAtPosition(i).toString())){
-
+                   for(int i=1; i<= 20; i++){
+                        if(Objects.equals(editCollege, college.getItemAtPosition(i).toString())){
+                            int position = i;
+                            //college.setVerticalScrollbarPosition(position);
+                            //college.setSelected(true);
+                            college.setSelection(position);
                         }
 
-                    } */
+                    }
 
                 }
 
@@ -848,26 +856,33 @@ public class AddPostActivity extends AppCompatActivity {
 
     } */
 
-    private void checkEnteredData() {
-
+    private boolean checkEnteredData() {
         if (isEmpty(BookTitle)) {
             BookTitle.setError("Book title is required!");
+            return false;
         }
 
         if (isEmpty(description)) {
             description.setError("Book description is required!");
+            return false;
         }
 
         if(radioGetPaid.isChecked() && isEmpty(bookPrice)){
             bookPrice.setError("Book price is required!" +"\n in case you want to sell the book");
+            return false;
         }
 
         if(image_rui == null){
             Toast.makeText(AddPostActivity.this, "please insert an image", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-        if (selectedItem.equals("0") || selectedItem.equals("Choose College") || selectedItem.equals("") )
+        if (selectedItem.equals("0") || selectedItem.equals("Choose College") || selectedItem.equals("") ) {
             Toast.makeText(AddPostActivity.this, "You have to select a college", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 
