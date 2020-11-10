@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,6 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jadaa.Config.Config;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -28,6 +33,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class ViewPostActivity extends AppCompatActivity {
 
@@ -42,13 +50,14 @@ public class ViewPostActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
 
-
+        /*---------------------delete app bar ------------------------*/
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //views from row_posts.xml
         ImageView uPictureIv, pImageIv;
@@ -105,7 +114,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
         pTitle.setText( " "+extras.getString("pTitle"));
         pDescriptionTv.setText(" "+extras.getString("pDescription"));
-        auther_name.setText(  " by "+extras.getString("pAuthor"));
+        auther_name.setText(extras.getString("pAuthor"));
         edition.setText( " Edition "+extras.getString("pEdition"));
 
 
@@ -182,8 +191,11 @@ public class ViewPostActivity extends AppCompatActivity {
                 String pDate = extras.getString("pDate");
                 String pTime= extras.getString("pTime");
                 String uid= extras.getString("uid");
+                String uri =extras.getString("pImage");
+                String edition = extras.getString("pEdition");
 
 
+                if(!price.equals("0")){
                 Intent viewSingle = new Intent(getApplicationContext(), PaypalActivity.class);
                 viewSingle.putExtra("pTitle", title);
                 viewSingle.putExtra("pDescription", des);
@@ -194,9 +206,86 @@ public class ViewPostActivity extends AppCompatActivity {
                 viewSingle.putExtra("pTime", pTime);
                 viewSingle.putExtra("uid", uid);
                 viewSingle.putExtra("pId", pid);
+                viewSingle.putExtra("pImage", uri);
+                viewSingle.putExtra("pEdition", edition);
 
-           startActivity(viewSingle);
+                startActivity(viewSingle);
+
+                // when buy free book
+                }else  if(price.equals("0")){
+
+                    Intent viewSingle = new Intent(getApplicationContext(), MyOrderActivity.class);
+                    viewSingle.putExtra("pTitle", title);
+                    viewSingle.putExtra("pDescription", des);
+                    viewSingle.putExtra("pAuthor", pAuth);
+                    viewSingle.putExtra("pPrice", price);
+                    viewSingle.putExtra("pStatus", pStatus);
+                    viewSingle.putExtra("pDate", pDate);
+                    viewSingle.putExtra("pTime", pTime);
+                    viewSingle.putExtra("uid", uid);
+                    viewSingle.putExtra("pId", pid);
+                    viewSingle.putExtra("pImage", uri);
+                    viewSingle.putExtra("pEdition", edition);
+                    viewSingle.putExtra("isBookFree", "YES");
+
+
+
+
+                    // اغير حالة البوست في الداتابيس من متاح إلى تم بيعه
+                   // final Bundle extras = getIntent().getExtras();
+                   // final String pid = extras.getString("pId");
+                    final String sellerID = extras.getString("uid");
+                    final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    // حدثت حالة الكتاب
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+                    ref.child(pid).child("BookStatus").setValue("SOLD");
+
+                    // خزنت آي دي البائع
+                    ref.child(pid).child("sellerID").setValue(sellerID);
+                    //خزنت آي دي المشتري
+                    ref.child(pid).child("purchaserID").setValue(thisUser.getUid());
+
+                    //Date & Time
+                    Calendar calFordDate = Calendar.getInstance();
+                    SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+                    String purchaseDate = currentDate.format(calFordDate.getTime());
+
+                    Calendar calFordTime = Calendar.getInstance();
+                    SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+                    String purchaseTime  = currentTime.format(calFordDate.getTime());
+
+
+                    HashMap<Object, String> hashMap = new HashMap<>();
+                    //put post info
+                    hashMap.put("sellerID",sellerID);
+                    hashMap.put("purchaserID", thisUser.getUid());
+                    hashMap.put("purchaseDate", purchaseDate);
+                    hashMap.put("purchaseTime", purchaseTime);
+                    hashMap.put("BookTitle",title);
+                    hashMap.put("BookPrice", price);
+                    hashMap.put("processing","1");
+                    hashMap.put("shipped","0" );
+                    hashMap.put("inTransit","0" );
+                    hashMap.put("delivered","0" );
+                    hashMap.put("pId", pid);
+                    hashMap.put("orderConfirmation","0"); // 0 means false (not confirm yet)
+                    hashMap.put("uri", uri);
+
+
+                    DatabaseReference ref1_= FirebaseDatabase.getInstance().getReference("soldBooks");
+                    ref1_.child(pid).setValue(hashMap);
+                    // اخزن في الداتابيس آي دي الكتاب و البائع والمشتري
+
+
+
+                    Toast.makeText(ViewPostActivity.this, "The book has been requested successfully", Toast.LENGTH_SHORT).show();
+
+                    startActivity(viewSingle);
+
+
                 }
+            }
 
 
     });

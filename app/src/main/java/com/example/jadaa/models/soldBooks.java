@@ -15,6 +15,81 @@ public class soldBooks {
     String shipped;
     String orderConfirmation;
     String uri;
+    String BookEdition;
+    String purchaserName;
+
+    public soldBooks(String bookPrice, String bookTitle, String delivered, String inTransit, String pId, String processing, String purchaseDate, String purchaseTime, String purchaserID, String sellerID, String shipped, String orderConfirmation, String uri, String bookEdition, String purchaserName, String purchaserPhone, String purchaserEmail, String bookAuthor) {
+        BookPrice = bookPrice;
+        BookTitle = bookTitle;
+        this.delivered = delivered;
+        this.inTransit = inTransit;
+        this.pId = pId;
+        this.processing = processing;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+        this.purchaserID = purchaserID;
+        this.sellerID = sellerID;
+        this.shipped = shipped;
+        this.orderConfirmation = orderConfirmation;
+        this.uri = uri;
+        BookEdition = bookEdition;
+        this.purchaserName = purchaserName;
+        this.purchaserPhone = purchaserPhone;
+        this.purchaserEmail = purchaserEmail;
+        BookAuthor = bookAuthor;
+    }
+
+    String purchaserPhone;
+    String purchaserEmail;
+
+
+    public String getPurchaserName() {
+        return purchaserName;
+    }
+
+    public void setPurchaserName(String purchaserName) {
+        this.purchaserName = purchaserName;
+    }
+
+    public String getPurchaserPhone() {
+        return purchaserPhone;
+    }
+
+    public void setPurchaserPhone(String purchaserPhone) {
+        this.purchaserPhone = purchaserPhone;
+    }
+
+    public String getPurchaserEmail() {
+        return purchaserEmail;
+    }
+
+    public void setPurchaserEmail(String purchaserEmail) {
+        this.purchaserEmail = purchaserEmail;
+    }
+
+
+
+
+
+
+
+    public String getBookEdition() {
+        return BookEdition;
+    }
+
+    public void setBookEdition(String bookEdition) {
+        BookEdition = bookEdition;
+    }
+
+    public String getBookAuthor() {
+        return BookAuthor;
+    }
+
+    public void setBookAuthor(String bookAuthor) {
+        BookAuthor = bookAuthor;
+    }
+
+    String BookAuthor;
 
 
     public String getOrderConfirmation() {
@@ -37,21 +112,7 @@ public class soldBooks {
 
     public soldBooks(){}
 
-    public soldBooks(String bookPrice, String bookTitle, String delivered, String inTransit, String pId, String processing, String purchaseDate, String purchaseTime, String purchaserID, String sellerID, String shipped,String uri , String orderConfirmation) {
-        BookPrice = bookPrice;
-        BookTitle = bookTitle;
-        this.delivered = delivered;
-        this.inTransit = inTransit;
-        this.pId = pId;
-        this.processing = processing;
-        this.purchaseDate = purchaseDate;
-        this.purchaseTime = purchaseTime;
-        this.purchaserID = purchaserID;
-        this.sellerID = sellerID;
-        this.shipped = shipped;
-        this.uri=uri;
-        this.orderConfirmation=orderConfirmation;
-    }
+
 
     public String getBookPrice() {
         return BookPrice;

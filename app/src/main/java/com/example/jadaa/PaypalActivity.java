@@ -1,11 +1,13 @@
 package com.example.jadaa;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +21,12 @@ import android.widget.Toast;
 import com.example.jadaa.Config.Config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -37,6 +43,27 @@ import java.util.HashMap;
 
 public class PaypalActivity extends AppCompatActivity {
 
+
+    //______________
+    AlertDialog.Builder dialogBuilder ;
+    AlertDialog dialog ;
+    Button ok_terms ;
+
+
+    String uri;
+    String title;
+    String price;
+    String edition;
+    String pAuth;
+
+
+    //_______________ view profile_____________
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    String name="" ,phone1="" ,email1=""; ///////////////////////////////////
+
 // payment system ________________________________    PAYMENT System
 
     private static final int PAYPAL_REQUEST_CODE = 7171; // 2
@@ -47,10 +74,12 @@ public class PaypalActivity extends AppCompatActivity {
 
     Button btnPayNow ;
     TextView edtAmount ;
+    TextView Tterms ;  ///////////
     String amount ="";
     double total =0 , tax =0 ,amountDouble = 0;
     ImageView pImageIv;
-    TextView pTitle ,bookPrice, subtotal, Tax ,Total, auther_name ,edition ;
+    TextView pTitle ,bookPrice, subtotal, Tax ,Total, auther_name ,editions ;
+    HashMap<Object, String> hashMap;
 
 
     @Override
@@ -97,20 +126,25 @@ public class PaypalActivity extends AppCompatActivity {
         bookPrice=(TextView) findViewById(R.id.bookPrice);
         btnPayNow = (Button) findViewById(R.id.btnPayNow);
         auther_name =(TextView) findViewById(R.id.auther_name);
+        Tterms =(TextView) findViewById(R.id.terms);
         //edition =(TextView) findViewById(R.id.edition);
 
 
-
-
+        Tterms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createDialog();
+            }
+        });
 
 
         // اعرض السعر لليوزر
         final Bundle extras = getIntent().getExtras();
-        String uri =extras.getString("pImage");
-        String title = extras.getString("pTitle");
-        String price =extras.getString("pPrice");
-        String edition = extras.getString("pEdition");
-        String pAuth =extras.getString("pAuthor");
+         uri =extras.getString("pImage");
+         title = extras.getString("pTitle");
+         price =extras.getString("pPrice");
+         edition = extras.getString("pEdition");
+         pAuth =extras.getString("pAuthor");
 
 
 
@@ -197,7 +231,7 @@ public class PaypalActivity extends AppCompatActivity {
                         // اغير حالة البوست في الداتابيس من متاح إلى تم بيعه
                         final Bundle extras = getIntent().getExtras();
                         final String pid = extras.getString("pId");
-                        final String buyer = extras.getString("uid");
+                        final String sellerID = extras.getString("uid");
                         final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
 
                         // حدثت حالة الكتاب
@@ -205,9 +239,9 @@ public class PaypalActivity extends AppCompatActivity {
                         ref.child(pid).child("BookStatus").setValue("SOLD");
 
                         // خزنت آي دي البائع
-                        ref.child(pid).child("BuyerID").setValue(buyer);
+                        ref.child(pid).child("sellerID").setValue(sellerID);
                         //خزنت آي دي المشتري
-                        ref.child(pid).child("PurchaserID").setValue(thisUser.getUid());
+                        ref.child(pid).child("purchaserID").setValue(thisUser.getUid());
 
                         //Date & Time
                         Calendar calFordDate = Calendar.getInstance();
@@ -219,15 +253,69 @@ public class PaypalActivity extends AppCompatActivity {
                         String purchaseTime  = currentTime.format(calFordDate.getTime());
 
 
+
+                         hashMap = new HashMap<>();
+                       // HashMap<Object, String> hashMap = new HashMap<>();
+
+                        //put post info
+                        hashMap.put("sellerID",sellerID);
+                        hashMap.put("purchaserID", thisUser.getUid());
+                        hashMap.put("purchaseDate", purchaseDate);
+                        hashMap.put("purchaseTime", purchaseTime);
+                        hashMap.put("BookTitle",title);
+                        hashMap.put("BookPrice", price);
+                        hashMap.put("processing","0");
+                        hashMap.put("shipped","0" );
+                        hashMap.put("inTransit","0" );
+                        hashMap.put("delivered","0" );
+                        hashMap.put("pId", pid);
+                        hashMap.put("orderConfirmation","0"); // 0 means false (not confirm yet)
+                        hashMap.put("uri", uri);
+                        hashMap.put("BookEdition", edition);
+                        hashMap.put("BookAuthor", pAuth );
+
+
+
+                        //--------------view profile-----------------
+                        firebaseAuth = FirebaseAuth.getInstance();
+                        user = firebaseAuth.getCurrentUser();
+                        firebaseDatabase = FirebaseDatabase.getInstance();
+                        databaseReference = firebaseDatabase.getReference("users");
+
+
+                        Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    //get Data
+                                    name = "" + ds.child("fullName").getValue();
+                                    phone1 = "" + ds.child("phone").getValue();
+                                    email1 = "" + ds.child("email").getValue();
+
+                                    hashMap.put("purchaserName",name);
+                                    hashMap.put("purchaserPhone", phone1 );
+                                    hashMap.put("purchaserEmail", email1 );
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+                        DatabaseReference ref1_= FirebaseDatabase.getInstance().getReference("soldBooks");
+                        ref1_.child(pid).setValue(hashMap);
                         // اخزن في الداتابيس آي دي الكتاب و البائع والمشتري
-
-
-
 
 
                         startActivity(new Intent(this, PaymentDetails.class)
                                 .putExtra("PaymentDetails", paymentDetails)
-                                .putExtra("PaymentAmount", amount)
+                                .putExtra("PaymentAmount",total)
                         );
 
                     } catch (JSONException e) {
@@ -243,5 +331,24 @@ public class PaypalActivity extends AppCompatActivity {
         else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID)
             Toast.makeText(this, "Invalid", Toast.LENGTH_SHORT).show();
 
+    }
+
+
+
+    public void createDialog (){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View  contactPupupView = getLayoutInflater().inflate(R.layout.payment_terms_policies,null);
+        ok_terms = (Button)contactPupupView.findViewById(R.id.ok);
+
+        dialogBuilder.setView(contactPupupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        ok_terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 }

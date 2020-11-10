@@ -76,6 +76,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         final String pTime = postList.get(i).getPostTime();
         final String pPublisher = postList.get(i).getPublisher();
         //set data
+
         myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);

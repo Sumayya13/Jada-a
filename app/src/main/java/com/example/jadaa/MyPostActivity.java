@@ -266,6 +266,9 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_heart:
                 Intent heart = new Intent(MyPostActivity.this, FavoriteActivity.class);
                 startActivity(heart); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(MyPostActivity.this, MyCustomersActivity.class);
+                startActivity(myCustomers); break;
             case R.id.nav_out:
                 android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
                 alertDialogBilder.setTitle("Log out");

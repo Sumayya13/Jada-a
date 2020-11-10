@@ -16,14 +16,22 @@
             android:id="@+id/nav_MyPost"
             android:icon="@drawable/ic_baseline_post_add_24"
             android:title="My Post" />
+
+        <item
+            android:id="@+id/nav_paople"
+            android:icon="@drawable/ic_baseline_people_alt_24"
+            android:title="My Customers" />
+
         <item
             android:id="@+id/nav_order"
             android:icon="@drawable/ic_baseline_order_24"
             android:title="My Order" />
+
         <item
             android:id="@+id/nav_heart"
             android:icon="@drawable/ic_baseline_favorite_24"
             android:title="Favorite" />
+
 
     </group>
 

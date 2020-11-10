@@ -101,6 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                //final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
                 user = new User(email, password, fullName, phone);
                 registerUser();
             }

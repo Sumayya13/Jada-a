@@ -47,7 +47,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     Menu menu;
 
-
     RecyclerView recyclerView;
     List<ModelPost> postList;
     AdapterPosts adapterPosts;
@@ -97,6 +96,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
 
 
+
+
         // if want to hide item of navigation
         /* menu = navigationView.getMenu();
         menu.findItem(R.id.nav_out).setVisible(false);
@@ -128,7 +129,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
                     ModelPost modelPost = ds.getValue(ModelPost.class);
-                    if (!modelPost.getUid().equals(thisUser.getUid())) {
+                    if (!modelPost.getUid().equals(thisUser.getUid()) && !modelPost.getBookStatus().equals("SOLD") ) {
                         postList.add(modelPost);
                         //adapter
                         adapterPosts = new AdapterPosts(HomeActivity.this, postList);
@@ -164,7 +165,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ModelPost modelPost = ds.getValue(ModelPost.class);
 
 
-                    if(!modelPost.getUid().equals(thisUser.getUid())){
+                    if(!modelPost.getUid().equals(thisUser.getUid()) ){
                     if(modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())||
                             modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())||
                             modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())||
@@ -268,6 +269,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_heart:
                 Intent favorite = new Intent(HomeActivity.this, FavoriteActivity.class);
                 startActivity(favorite); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(HomeActivity.this, MyCustomersActivity.class);
+            startActivity(myCustomers); break;
             case R.id.nav_out:{
                 android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
                 alertDialogBilder.setTitle("Log out");

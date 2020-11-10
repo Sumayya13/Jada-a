@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jadaa.MyOrderActivity;
+import com.example.jadaa.MyOrderDetailsActivity;
 import com.example.jadaa.R;
 import com.example.jadaa.ViewPostActivity;
 import com.example.jadaa.models.ModelPost;
@@ -72,10 +73,31 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         final String shipped = postList.get(i).getShipped();
         final String uri = postList.get(i).getUri();
         final String orderConfirmation = postList.get(i).getOrderConfirmation();
+        final String BookAuthor = postList.get(i).getBookAuthor();
+        final String BookEdition= postList.get(i).getBookEdition();
+
+
+
+        // بأعرض آخر حالة للطلب
+        if (delivered.equals("1")) {
+            myHolder.orderstatusT.setText("Delivered");
+
+        }
+        else if (inTransit.equals("1")) {
+            myHolder.orderstatusT.setText("In Transit");
+        }
+        else if (shipped.equals("1")) {
+            myHolder.orderstatusT.setText("Shipped");
+        }
+        else
+        if (processing.equals("1")) {
+            myHolder.orderstatusT.setText("Processing");
+        }else  myHolder.orderstatusT.setText("ordered");
 
 
 
 
+/*
 
         if (orderConfirmation.equals("true")) {
             myHolder.confirm_order.setClickable(false);
@@ -83,20 +105,23 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         }
 
 
-        if(shipped.equals("1")) {
+        if(delivered.equals("1")) {
             myHolder.confirm_order.setClickable(false);
             myHolder.confirm_order.setVisibility(View.VISIBLE);
         }
 
+          if (delivered.equals("0"))// not delivered yet
+
+        {
+            myHolder.confirm_order.setVisibility(View.INVISIBLE);
+            myHolder.confirm_order.setClickable(false);
+
+        }
+*/
 
         //set data
-        // myHolder.bookPrice.setText(BookPrice);
         myHolder.BookTitle.setText(BookTitle);
         myHolder.order_date.setText(purchaseDate + " " + purchaseTime);
-
-        // myHolder.bookPrice.setText(BookPrice);
-        // myHolder.bookPrice.setText(BookPrice);
-        //myHolder.pTitle.setText(pTitle);
 
 
         if (BookPrice.equals("0"))
@@ -110,16 +135,78 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         }
 
 
-        if (delivered.equals("0"))// not delivered yet
-
-        {
-            myHolder.confirm_order.setVisibility(View.INVISIBLE);
-            myHolder.confirm_order.setClickable(false);
-
-        }
 
 
         // بأعرض اللون للحالة الطلب
+
+        if (delivered.equals("1"))
+        {
+            myHolder.deliveredT.setImageDrawable(context.getResources().getDrawable(R.drawable.delivered__status));
+        }else myHolder.deliveredT.setVisibility(View.INVISIBLE); // not delivered yet
+
+
+        if (inTransit.equals("1"))
+        {
+            myHolder.in_transitT.setImageDrawable(context.getResources().getDrawable(R.drawable.intransit_status));
+        }else myHolder.in_transitT.setVisibility(View.INVISIBLE); // not in Transit yet
+
+
+            if (shipped.equals("1"))  // not in transit yet
+        {
+            myHolder.shippedT.setImageDrawable(context.getResources().getDrawable(R.drawable.shipped__status));
+        }else myHolder.shippedT.setVisibility(View.INVISIBLE); // not in Transit yet
+
+
+
+        if (processing.equals("1"))  // not shipped yet
+        {
+            myHolder.processingT.setImageDrawable(context.getResources().getDrawable(R.drawable.processing_status));
+        }else    myHolder.processingT.setVisibility(View.INVISIBLE);// not in Transit yet
+
+/*
+
+
+        // بأعرض اللون للحالة الطلب
+
+        if (delivered.equals("1"))
+        {
+            myHolder.deliveredT.setImageDrawable(context.getResources().getDrawable(R.drawable.delivered__status));
+        }else myHolder.deliveredT.setImageDrawable(context.getResources().getDrawable(R.drawable.gray_new)); // not delivered yet
+
+
+        if (inTransit.equals("1"))
+        {
+            myHolder.in_transitT.setImageDrawable(context.getResources().getDrawable(R.drawable.intransit_status));
+        }else myHolder.in_transitT.setImageDrawable(context.getResources().getDrawable(R.drawable.gray_new)); // not in Transit yet
+
+
+            if (shipped.equals("1"))  // not in transit yet
+        {
+            myHolder.shippedT.setImageDrawable(context.getResources().getDrawable(R.drawable.shipped__status));
+        }else myHolder.shippedT.setImageDrawable(context.getResources().getDrawable(R.drawable.gray_new)); // not in Transit yet
+
+
+
+        if (processing.equals("1"))  // not shipped yet
+        {
+            myHolder.processingT.setImageDrawable(context.getResources().getDrawable(R.drawable.processing_status));
+        }else    myHolder.processingT.setImageDrawable(context.getResources().getDrawable(R.drawable.gray_new));// not in Transit yet
+
+
+*/
+
+/*
+
+        // بأعرض اللون للحالة الطلب
+        if (processing.equals("0"))  // not shipped yet
+        {
+
+            myHolder.processingT.setVisibility(View.INVISIBLE);
+            myHolder.confirm_order.setVisibility(View.INVISIBLE);
+            myHolder.confirm_order.setClickable(false);
+            myHolder.order_status.setText("order");
+
+        }
         if (shipped.equals("0"))  // not shipped yet
         {
             myHolder.shippedT.setVisibility(View.INVISIBLE);
@@ -145,22 +232,10 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
 
 
 
+*/
 
 
 
-
-        // بأعرض آخر حالة للطلب
-        if (delivered.equals("1")) {
-            myHolder.order_status.setText("Delivered");
-
-        }
-        else if (inTransit.equals("1")) {
-            myHolder.order_status.setText("in Transit");
-        }
-        else if (shipped.equals("1")) {
-            myHolder.order_status.setText("Shipped");
-        }
-           else  myHolder.order_status.setText("Processing");
 
 
 
@@ -182,6 +257,33 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
                 //    Toast.makeText(AdapterMyOrder.class, "Cancel", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
+
+
+
+        myHolder.order_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent viewSingle = new Intent(context, MyOrderDetailsActivity.class);
+
+                viewSingle.putExtra("pId", pId);
+                viewSingle.putExtra("purchaseDate", purchaseDate);
+                viewSingle.putExtra("purchaseTime", purchaseTime);
+                viewSingle.putExtra("processing", processing);
+                viewSingle.putExtra("shipped", shipped);
+                viewSingle.putExtra("inTransit", inTransit);
+                viewSingle.putExtra("delivered", delivered);
+                viewSingle.putExtra("uri", uri);
+                viewSingle.putExtra("BookTitle", BookTitle);
+                viewSingle.putExtra("BookPrice", BookPrice);
+                viewSingle.putExtra("BookAuthor", BookAuthor);
+                viewSingle.putExtra("BookEdition", BookEdition);
+
+                context.startActivity(viewSingle);
+
+                }
+
         });
 
 
@@ -220,7 +322,7 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         //views from row_posts.xml
         ImageView processingT ,shippedT,in_transitT,deliveredT;
         ImageView bookImage ,order_detail2;
-        TextView order_status , order_date ,BookTitle ,bookPrice,confirm_order,order_detail;
+        TextView order_status , order_date ,BookTitle ,bookPrice,confirm_order,order_detail,orderstatusT ;
 
 
         public MyHolder(@NonNull View itemView) {
@@ -233,13 +335,12 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
             deliveredT = itemView.findViewById(R.id.delivered);
             bookImage = itemView.findViewById(R.id.bookImage);
             order_detail2 = itemView.findViewById(R.id.order_detail2);
-            order_status = itemView.findViewById(R.id.order_status);
             order_date = itemView.findViewById(R.id.order_date);
             BookTitle = itemView.findViewById(R.id.BookTitle);
             bookPrice = itemView.findViewById(R.id.bookPrice);
             confirm_order = itemView.findViewById(R.id.confirm_order);
             order_detail = itemView.findViewById(R.id.order_detail);
-
+            orderstatusT = itemView.findViewById(R.id.orderstatus);
 
         }
     }

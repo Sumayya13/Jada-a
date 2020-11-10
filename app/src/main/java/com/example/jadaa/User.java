@@ -5,6 +5,17 @@ public class User {
     private String password;
     private String fullName;
     private String phone;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    private String uid;
+
     public User() {
     }
 
@@ -18,6 +29,7 @@ public class User {
         this.password = password;
         this.fullName = fullName;
         this.phone = phone;
+
     }
 
     public String getEmail() {

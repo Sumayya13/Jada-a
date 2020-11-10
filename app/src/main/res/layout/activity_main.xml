@@ -80,6 +80,7 @@
         android:id="@+id/register_textview"
         android:layout_width="80dp"
         android:layout_height="0dp"
+        android:layout_marginTop="9dp"
         android:layout_marginStart="97dp"
         android:layout_marginLeft="97dp"
         android:layout_marginEnd="34dp"
@@ -92,10 +93,15 @@
         app:layout_constraintEnd_toStartOf="@+id/forget_password_textview"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+
     <TextView
         android:id="@+id/forget_password_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="97dp"
+        android:layout_marginLeft="97dp"
+        android:layout_marginBottom="252dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="97dp"
         android:layout_marginRight="97dp"
@@ -104,6 +110,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/register_textview"
         app:layout_constraintTop_toBottomOf="@+id/button" />
+
+
 
     <ImageView
         android:id="@+id/imageView"

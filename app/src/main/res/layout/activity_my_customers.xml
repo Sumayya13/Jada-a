@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyOrderActivity"
     android:id="@+id/drawer_layout"
     tools:openDrawer="start"
-    >
-<!---     tools:openDrawer="start"
--->
+    tools:context=".MyCustomersActivity">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,32 +37,32 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
 
-<LinearLayout
-    android:id="@+id/NoOrder"
-    android:visibility="visible"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="327dp"
-            android:layout_height="280dp"
-            app:srcCompat="@drawable/emptybox"
-            tools:ignore="VectorDrawableCompat"
-     />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/NoOrder"
+            android:visibility="visible"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:textColor="#090000"
-            android:textSize="40dp"
-            android:text="No Order" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="327dp"
+                android:layout_height="280dp"
+                app:srcCompat="@drawable/group"
+                tools:ignore="VectorDrawableCompat"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:textColor="#090000"
+                android:textSize="40dp"
+                android:text="No Customer" />
 
 
-</LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,5 +75,6 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -17,7 +17,12 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".PaymentDetails"></activity>
+        <activity android:name=".myCustomersDetails"></activity>
+        <activity android:name=".MyOrderDetailsActivity" />
+        <activity
+            android:name=".MyCustomersActivity"
+            android:label="My Customers" />
+        <activity android:name=".PaymentDetails" />
         <activity android:name=".PaypalActivity" />
         <activity android:name=".googlePay" />
         <activity android:name=".ViewPostActivity" /> <!-- android:theme="@style/AppTheme" -->

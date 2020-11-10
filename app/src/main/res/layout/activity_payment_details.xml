@@ -4,42 +4,204 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".PaymentDetails">
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:id="@+id/txtId"
-        android:textStyle="bold"
-        android:text="Payment ID"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:id="@+id/txtAmount"
-        android:textStyle="bold"
-        android:text="Payment Amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-    android:id="@+id/txtStatus"
-        android:text="Payment Status"
-        android:textStyle="bold"
-
-        android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    />
+        android:orientation="vertical">
+        <!--   android:layout_centerInParent="true"-->
 
 
 
-</LinearLayout>
+    </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            app:layout_constraintTop_toTopOf="parent">
+            <!-- app:layout_constraintEnd_toEndOf="parent"-->
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="176dp"
+                android:layout_marginTop="35dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/check_3"
+                tools:ignore="VectorDrawableCompat" />
+
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center_horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="The seller will contact you as soon as possible
+Make sure your phone number is correct"
+                android:textColor="#011220"
+                android:textSize="16dp" />
+
+
+
+            <TextView
+                android:id="@+id/txtAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment Amount"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Status "
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold" />
+
+                <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment Status"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/txtId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment ID"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible" />
+
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="100dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="100dp">
+
+                <ImageView
+                    android:id="@+id/homeIv"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/homy"
+                    tools:ignore="VectorDrawableCompat"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:id="@+id/homeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="16dp"
+                    android:text="Move to my order" />
+
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="100dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="100dp">
+
+                <ImageView
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/imageprofile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/profiley"
+                    tools:ignore="VectorDrawableCompat"
+                    android:layout_marginLeft="10dp"
+              />
+                <TextView
+                    android:id="@+id/editProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="16dp"
+                    android:text="Move to edit profile" />
+
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="100dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="100dp">
+
+                <ImageView
+                    android:id="@+id/imageMyOrder"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="55dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/order"
+                    tools:ignore="VectorDrawableCompat"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:id="@+id/moveMyOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="16dp"
+                    android:text="Move to my order" />
+
+
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>

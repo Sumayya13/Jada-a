@@ -205,7 +205,9 @@ public class MainActivity extends AppCompatActivity {
         Intent profileIntent = new Intent(getApplicationContext(), HomeActivity.class);
         profileIntent.putExtra("email", currentUser.getEmail());
         Intent add= new Intent(getApplicationContext(), AddPostActivity.class);
+        Intent paypal= new Intent(getApplicationContext(), PaypalActivity.class);
         add.putExtra("email", currentUser.getEmail());
+        paypal .putExtra("email", currentUser.getEmail());
         Log.v("DATA", currentUser.getUid());
         startActivity(profileIntent);
     }

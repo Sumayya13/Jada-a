@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -99,6 +100,10 @@ public class AddPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+
+        /*---------------------delete app bar ------------------------*/
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //init permissions arrays
         cameraPermission= new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -307,8 +312,8 @@ public class AddPostActivity extends AppCompatActivity {
                                 hashMap.put("pTime", timeStamp);
                                 hashMap.put("PostDate", saveCurrentDate);
                                 hashMap.put("PostTime", saveCurrentTime);
-                                hashMap.put("BuyerID","");
-                                hashMap.put("PurchaserID","");
+                                //hashMap.put("BuyerID","");
+                                //hashMap.put("PurchaserID","");
 
                                 
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
