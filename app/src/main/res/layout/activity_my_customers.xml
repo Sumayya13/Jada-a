@@ -59,13 +59,12 @@
                 android:gravity="center"
                 android:textColor="#090000"
                 android:textSize="40dp"
-                android:text="No Customer" />
+                android:text="No Customers" />
 
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <!--  Navigation -->
     <com.google.android.material.navigation.NavigationView
@@ -78,3 +77,4 @@
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+

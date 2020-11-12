@@ -42,7 +42,7 @@ import java.util.List;
 
 public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder>{
 
-   // String uid,pTitle,pDescription,pAuthor,pEdition,pImage,pPrice,pStatus,pCollege,pDate,pTime,pPublisher;
+    // String uid,pTitle,pDescription,pAuthor,pEdition,pImage,pPrice,pStatus,pCollege,pDate,pTime,pPublisher;
     Context context;
     List<ModelMyPost> postList;
 
@@ -76,7 +76,6 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         final String pTime = postList.get(i).getPostTime();
         final String pPublisher = postList.get(i).getPublisher();
         //set data
-
         myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);
@@ -88,7 +87,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             myHolder.pDescriptionTv.setText("  "+pPrice+" SAR");
 
 
-       //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+        //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
 
 
         myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +168,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
 
             //  Picasso.get().load(pImage).into(myHolder.pImageIv);
             Picasso.get().load(postList.get(i).getBookImage()).into(myHolder.pImageIv);
-           // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+            // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
         }
         catch (Exception e){
         }
@@ -191,7 +190,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
                                 // close the dialog
                             }
                         })
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int id) {
@@ -227,11 +226,23 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
 
 
 
-                            }
+            }
 
 
 
         });// end delete post
+
+        myHolder.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //edit icon is clicked
+                // start AddPostActivity with key "editPost" and the id of the post clicked
+                Intent intent = new Intent(context, AddPostActivity.class);
+                intent.putExtra("key","editPost");
+                intent.putExtra("editPostId", pId);
+                context.startActivity(intent);
+            }
+        });
 
 
 
@@ -304,7 +315,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         //views from row_posts.xml
         ImageView uPictureIv, pImageIv;
         TextView uNameTv, pTimeTv, pTitle, pDescriptionTv;
-        ImageButton moreBtn;
+        ImageButton moreBtn, editBtn;
         Button favoriteBtn, commentBtn, shareBtn;
 
         public MyHolder(@NonNull View itemView) {
@@ -318,6 +329,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             pTitle = itemView.findViewById(R.id.pTitle);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
             moreBtn = itemView.findViewById(R.id.moreBtn);
+            editBtn = itemView.findViewById(R.id.editBtn);
 
 
 

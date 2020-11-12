@@ -19,9 +19,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +33,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
+
                 android:layout_marginRight="10dp"
                 android:background="@drawable/ic_baseline_menu_book_24blue"
                 android:foregroundGravity="center"
@@ -49,7 +46,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="20dp"
+                android:layout_margin="10dp"
+android:layout_gravity="center"
                 android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
@@ -59,9 +57,9 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:textColor="#111111"
                     android:lines="2"
                     android:text="Title"
+                    android:textColor="#111111"
                     android:textSize="18dp" />
 
                 <TextView
@@ -95,10 +93,7 @@
                     android:textSize="14dp" />
 
 
-
-
             </LinearLayout>
-
 
 
         </LinearLayout>

@@ -45,7 +45,7 @@ import android.widget.TextView;
 
 import java.util.regex.Pattern;
 
-public class ProfileActivity extends AppCompatActivity  {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener   {
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -84,8 +84,13 @@ String name ,phone1 ,email1; ///////////////////////////////////
         getSupportActionBar().setTitle("Profile");
 
         /*---------------------Hooks------------------------*/
-        navigationView = findViewById(R.id.nav_view);
-        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view );
+        drawerLayout = findViewById(R.id.drawer_layout );
+        toolbar = findViewById(R.id.toolbar);
+
+
+
+        /*---------------------Hooks------------------------*/
         email = findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         Name = findViewById(R.id.name);
@@ -138,7 +143,14 @@ String name ,phone1 ,email1; ///////////////////////////////////
         });
 
 
-
+        /*---------------------Navigation------------------------*/
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle=new
+                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_Profile);
 
         /*---------------------Navigation------------------------*/
    /*   navigationView.bringToFront();
@@ -217,4 +229,64 @@ String name ,phone1 ,email1; ///////////////////////////////////
 
 
  */
+
+    /*---------------------to Open or close Navigation ------------------------*/
+    public void onBackPressed(){
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                Intent profile = new Intent(ProfileActivity.this, HomeActivity.class);
+                startActivity(profile); break;
+            case R.id.nav_Profile: break;
+            case R.id.nav_MyPost:
+                Intent myPost = new Intent(ProfileActivity.this, MyPostActivity.class);
+                startActivity(myPost); break;
+            case R.id.nav_order:  Intent profile1 = new Intent(ProfileActivity.this, MyOrderActivity.class);
+                startActivity(profile1); break;
+            case R.id.nav_heart:
+                Intent heart = new Intent(ProfileActivity.this, FavoriteActivity.class);
+                startActivity(heart); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(ProfileActivity.this, MyCustomersActivity.class);
+                startActivity(myCustomers); break;
+            case R.id.nav_out:
+                android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
+                alertDialogBilder.setTitle("Log out");
+                alertDialogBilder.setMessage("Are you sure you want to log out?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+
+                                FirebaseAuth.getInstance().signOut();
+                                finish();
+                                Intent logout = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(logout);
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

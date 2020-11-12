@@ -21,7 +21,8 @@
         <activity android:name=".MyOrderDetailsActivity" />
         <activity
             android:name=".MyCustomersActivity"
-            android:label="My Customers" />
+            android:label="My Customers"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PaymentDetails" />
         <activity android:name=".PaypalActivity" />
         <activity android:name=".googlePay" />

@@ -125,7 +125,6 @@ public class MyOrderActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_order);
 
-
     }//onCreate
 
 

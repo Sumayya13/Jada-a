@@ -48,7 +48,6 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
     private EditText nameEditText, passwordEditText, confirmPassEditText;
     private EditText phoneEditText, emailEditText;
     // Toolbar toolbar;
-    String name ,phone1 ,email1; ///////////////////////////////////
     // private String email ;
     // private static final String USERS = "users";
 
@@ -71,7 +70,7 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
     public void onBindViewHolder(@NonNull final MyHolder myHolder, int i) {
 
          //get data
-
+        final String name ,phone1 ,email1; ///////////////////////////////////
         final String BookPrice = postList.get(i).getBookPrice();
         final String BookTitle = postList.get(i).getBookTitle();
         final String delivered = postList.get(i).getDelivered();
@@ -105,7 +104,36 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
         } catch (Exception e) {
         }
 
+        // Get a reference to our posts
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(purchaserID);
 
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+             if (dataSnapshot.getValue() != null) {
+                 User user = dataSnapshot.getValue(User.class);
+
+                 String name =user.getFullName() ;
+                 String phone1 = user.getPhone() ;
+
+                 myHolder.TpurchaserName.setText(user.getFullName());
+                 myHolder.TpurchaserPhone.setText(user.getPhone());
+                 // System.out.println(post);
+
+             }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        /*
         //--------------view profile-----------------
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
@@ -139,6 +167,7 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
             }
         });
 
+*/
 
         myHolder.Torder_detail2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,8 +185,10 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookPrice", BookPrice);
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
-                viewSingle.putExtra("purchaserName", name);
-                viewSingle.putExtra("purchaserPhone", phone1);
+                viewSingle.putExtra("purchaserID", purchaserID);
+                //   viewSingle.putExtra("purchaserName", name);
+
+              //  viewSingle.putExtra("purchaserPhone", phone1);
 
                 context.startActivity(viewSingle);
             }
@@ -181,8 +212,9 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookPrice", BookPrice);
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
-                viewSingle.putExtra("purchaserName", name);
-                viewSingle.putExtra("purchaserPhone", phone1);
+                viewSingle.putExtra("purchaserID", purchaserID);
+             //   viewSingle.putExtra("purchaserName", name);
+              //  viewSingle.putExtra("purchaserPhone", phone1);
                 context.startActivity(viewSingle);
             }
         });

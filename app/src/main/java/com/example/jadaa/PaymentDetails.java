@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,14 +17,18 @@ import org.json.JSONObject;
 public class PaymentDetails extends AppCompatActivity {
 
 
-    TextView txtId, txtAmount , txtStatus , moveMyOrder ,editProfile ;
-    ImageView imageMyOrder,imageprofile;
+    TextView txtId, txtAmount , txtStatus , moveMyOrder ,editProfile ,homeTv ;
+    ImageView imageMyOrder,imageprofile , homeIv;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_details);
+
+        /*---------------------delete app bar ------------------------*/
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         txtId = (TextView)findViewById(R.id.txtId);
@@ -33,7 +38,23 @@ public class PaymentDetails extends AppCompatActivity {
         moveMyOrder = (TextView)findViewById(R.id.moveMyOrder);
         imageMyOrder = (ImageView)findViewById(R.id.imageMyOrder);
         imageprofile = (ImageView)findViewById(R.id.imageprofile);
+        homeIv =(ImageView)findViewById(R.id.homeIv);
+        homeTv = (TextView)findViewById(R.id.homeTv);
 
+        homeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent move_To_home = new Intent(PaymentDetails.this, HomeActivity.class);
+                startActivity(move_To_home );
+            }
+        });
+        homeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent move_To_home = new Intent(PaymentDetails.this, HomeActivity.class);
+                startActivity(move_To_home );
+            }
+        });
 
         imageprofile.setOnClickListener(new View.OnClickListener() {
             @Override
