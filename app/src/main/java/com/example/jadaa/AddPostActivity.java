@@ -109,6 +109,9 @@ public class AddPostActivity extends AppCompatActivity {
     String editTitle, editDescription, editImage, editBookAuthor, editBookEdition, editBookPrice, editCollege;
     RadioButton editRadioForFree, editRadioGetPaid;
 
+    String sold = "SOLD";
+    String bStatus;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,13 +281,19 @@ public class AddPostActivity extends AppCompatActivity {
                     return;
                 }
 
+                //&& !checkStatus()
                 if(isUpdateKey.equals("editPost")){
-                    beginUpdate(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
+                    if (checkSpaces()){
+                        beginUpdate(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
+                    }
+
                 }
                 if(!isUpdateKey.equals("editPost")){
-                        checkImageNotNull();
+                        //checkImageNotNull();
+                        //checkEnteredData();
                         uploadData(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val);
                 }
+
 
 
                /* if(image_rui != null){
@@ -311,6 +320,44 @@ public class AddPostActivity extends AppCompatActivity {
         });
 
     }//onCreate
+
+   /* private boolean checkStatus() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+        //get the details of post using the post id
+        Query fquery = reference.orderByChild("BookStatus").equalTo(sold);
+        fquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                bStatus = ""+dataSnapshot.child("BookStatus").getValue();
+
+
+                if(bStatus.equals(sold)){
+                    Toast.makeText(getApplicationContext(), "This book is sold\n the post can't be edited", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return true;
+    } */
+   private boolean checkSpaces() {
+       String title_val = BookTitle.getText().toString().trim();
+       String description_val = description.getText().toString().trim();
+       if(title_val.matches("")){
+           BookTitle.setError("Book title is required!");
+           return false;
+       }
+
+       if(description_val.matches("")){
+           description.setError("Book description is required!");
+           return false;
+       }
+       return true;
+   }
 
     private boolean checkImageNotNull() {
         if(image_rui == null){
@@ -384,6 +431,8 @@ public class AddPostActivity extends AppCompatActivity {
                                         public void onSuccess(Void aVoid) {
                                             pd.dismiss();
                                             Toast.makeText(AddPostActivity.this,"Post Updated Successfully", Toast.LENGTH_SHORT).show();
+                                            Intent move_To_MyPost = new Intent(AddPostActivity.this, MyPostActivity.class);
+                                            startActivity(move_To_MyPost);
 
                                         }
                                     })
@@ -470,7 +519,8 @@ public class AddPostActivity extends AppCompatActivity {
                                                         public void onSuccess(Void aVoid) {
                                                             pd.dismiss();
                                                             Toast.makeText(AddPostActivity.this,"Post Updated Successfully", Toast.LENGTH_SHORT).show();
-
+                                                            Intent move_To_MyPost = new Intent(AddPostActivity.this, MyPostActivity.class);
+                                                            startActivity(move_To_MyPost);
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -552,7 +602,7 @@ public class AddPostActivity extends AppCompatActivity {
                     }
 
                     //set college
-                    for(int i=1; i<= 20; i++){
+                    for(int i=1; i<= 21; i++){
                         if(Objects.equals(editCollege, college.getItemAtPosition(i).toString())){
                             int position = i;
                             //college.setVerticalScrollbarPosition(position);

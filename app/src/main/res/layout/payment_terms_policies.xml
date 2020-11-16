@@ -37,7 +37,7 @@
             android:layout_gravity="left"
             android:layout_marginTop="10dp"
             android:gravity="left"
-            android:text="All prices are in U.S. dollars. \nJada'a books standard payment terms are 60 days.
+            android:text="All prices are in U.S. dollars.
             \nThe application is not responsible for any mistakes committed by the seller.
 "
             tools:layout_editor_absoluteX="164dp"

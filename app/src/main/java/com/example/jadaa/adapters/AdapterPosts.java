@@ -13,10 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.jadaa.PostDetail;
 import com.example.jadaa.R;
+import com.example.jadaa.User;
 import com.example.jadaa.ViewMyPostActivity;
 import com.example.jadaa.ViewPostActivity;
 import com.example.jadaa.models.ModelPost;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -42,7 +49,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyHolder myHolder, int i) {
          //get data
         final String uid = postList.get(i).getUid();
         final String pId = postList.get(i).getpId();
@@ -57,8 +64,10 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         final String pDate = postList.get(i).getPostDate();
         final String pTime = postList.get(i).getPostTime();
         final String pPublisher = postList.get(i).getPublisher();
+
+
+
         //set data
-        myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);
 
@@ -69,10 +78,57 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
             myHolder.pDescriptionTv.setText(pPrice+" SAR");
 
 
-       //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+// to show user info
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(uid);
 
-        //set post image
-        //String url = pImage;
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    String name =user.getFullName() ;
+
+                    myHolder.uNameTv.setText(name);
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+
+        myHolder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // move data to ViewPostActivity page to view
+                Intent viewSingle = new Intent(context, PostDetail.class);
+                viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage",pImage);
+                viewSingle.putExtra("pDescription", pDescription);
+                viewSingle.putExtra("pAuthor", pAuthor);
+                viewSingle.putExtra("pEdition", pEdition);
+                viewSingle.putExtra("pPrice", pPrice);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pCollege", pCollege);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("pPublisher", pPublisher);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("postId", pId);
+
+                context.startActivity(viewSingle);
+            }
+        });
+
         myHolder.pTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +240,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
             pTitle = itemView.findViewById(R.id.pTitle);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-
+            commentBtn = itemView.findViewById(R.id.commentBtn1);
 
         }
     }
