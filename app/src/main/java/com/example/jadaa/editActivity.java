@@ -95,14 +95,16 @@ public static final String TAG ="TAG";
 
 
 
-     //   mAuth=FirebaseAuth.getInstance();
-      //  curruntuserid=mAuth.getCurrentUser().getUid();
+        mAuth=FirebaseAuth.getInstance();
+        curruntuserid=mAuth.getCurrentUser().getUid();
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        Save(this);
-       // databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+
+        databaseReference = FirebaseDatabase.getInstance()
+                .getReference("users");
 
 
         /*
@@ -148,7 +150,7 @@ public static final String TAG ="TAG";
 
 
     }//onClick
-    public void Save(editActivity view) {
+    public void Save(View view) {
 
 
 
@@ -160,7 +162,6 @@ public static final String TAG ="TAG";
 
 
 
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,14 +169,14 @@ public static final String TAG ="TAG";
                 String phone1=ephone.getText().toString().trim();
                 String email1=eemail.getText().toString().trim();
 
-                boolean flag1= validateEmail(email1);
-                boolean flag2= validateName(name1);
-                boolean flag3= validatePhone(phone1);
-             //   isEmpty(email1,name1,phone1);
-             //   if(isEmpty(email1,phone1,name1)){
+                validateEmail(email1);
+                validateName(name1);
+                validatePhone(phone1);
+                isEmpty(email1,name1,phone1);
+                if(isEmpty(email1,phone1,name1)){
 
 
-             /*       AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(
+                    AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(
                             editActivity.this);
                     alertDialogBilder.setTitle("message");
                     alertDialogBilder.setMessage("Please enter a vaild inputs")
@@ -191,27 +192,24 @@ public static final String TAG ="TAG";
                             eemail = findViewById(R.id.editemail);*/
 
 
-                             //   }
-                    //        });
+                                }
+                            });
 
-/*
+
                     AlertDialog alertDialog = alertDialogBilder.create();
-                    alertDialog.show();           */
+                    alertDialog.show();
 
-             /*   }else if (!validateEmail(email1) || !validateName(name1) || !validatePhone(phone1) ){
+                }else if (!validateEmail(email1) || !validateName(name1) || !validatePhone(phone1) ){
                     return;
-              } */
+              }
 
-                if(flag1 && flag2 && flag3){
+                Map<String, Object> updates = new HashMap<String,Object>();
 
-                    Map<String, Object> updates = new HashMap<>();
+                updates.put("fullName", name1);
+                updates.put("phone", phone1);
+                updates.put("email", email1);
+                updateData.updateChildren(updates);
 
-                    updates.put("fullName", name1);
-                    updates.put("phone", phone1);
-                    updates.put("email", email1);
-                    updateData.updateChildren(updates);
-
-                }
 
             }
         });
@@ -263,11 +261,11 @@ public static final String TAG ="TAG";
 
 
 
-  /*  private boolean isEmpty(String string1,String string2,String string3) {
+    private boolean isEmpty(String string1,String string2,String string3) {
         if (string1.isEmpty()&&string2.isEmpty()&&string3.isEmpty()) {
 
             Toast.makeText(editActivity.this, "empty", Toast.LENGTH_SHORT).show();
             return true;
-        }else return false;} */
+        }else return false;}
 
 }

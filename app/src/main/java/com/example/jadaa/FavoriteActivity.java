@@ -85,7 +85,10 @@ public class FavoriteActivity extends AppCompatActivity implements NavigationVie
                 Intent myOrder = new Intent(FavoriteActivity.this, MyOrderActivity.class);
                 startActivity(myOrder); break;
             case R.id.nav_heart: break;
-            case R.id.nav_out:
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(FavoriteActivity.this, MyCustomersActivity.class);
+                startActivity(myCustomers); break;
+                case R.id.nav_out:
                 android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
                 alertDialogBilder.setTitle("Log out");
                 alertDialogBilder.setMessage("Are you sure you want to log out?")

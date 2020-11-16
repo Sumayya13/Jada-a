@@ -16,6 +16,46 @@ public class ModelPost {
     String BookEdition;
     String pId;
 
+    String purchaseDate;
+    String purchaseTime;
+
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public String getPurchaseTime() {
+        return purchaseTime;
+    }
+
+    public void setPurchaseTime(String purchaseTime) {
+        this.purchaseTime = purchaseTime;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String purchaseDate, String purchaseTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+    }
+
+
+
+
 
    public String getpId() {
         return pId;
@@ -25,22 +65,6 @@ public class ModelPost {
         this.pId = pId;
     }
 
-
-    public ModelPost(String BookTitle, String BookDescription, String BookImage, String BookStatus, String BookPrice, String uid, String college, String bookAuthor, String bookEdition, String postDate, String postTime, String publisher,String pId) {
-        this.BookTitle = BookTitle;
-        this.BookDescription = BookDescription;
-        this.BookImage = BookImage;
-        this.BookStatus = BookStatus;
-        this.BookPrice = BookPrice;
-        this.uid = uid;
-        this.College = college;
-        this.BookAuthor = bookAuthor;
-        this.BookEdition = bookEdition;
-        this.PostDate = postDate;
-        this.PostTime = postTime;
-        this.Publisher = publisher;
-        this.pId=pId;
-    }
 
 
     public ModelPost() {

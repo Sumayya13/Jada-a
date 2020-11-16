@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,8 +46,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Toolbar toolbar;
     Menu menu;
-
-   // TextView searchNotFound;
 
     RecyclerView recyclerView;
     List<ModelPost> postList;
@@ -86,7 +83,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view );
         drawerLayout = findViewById(R.id.drawer_layout );
         setSupportActionBar(toolbar);
-        //searchNotFound = findViewById(R.id.searchNotFound);
 
 
         /*---------------------Navigation------------------------*/
@@ -98,6 +94,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         // send this page
         navigationView.setCheckedItem(R.id.nav_home);
+
+
 
 
         // if want to hide item of navigation
@@ -131,7 +129,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
                     ModelPost modelPost = ds.getValue(ModelPost.class);
-                    if (!modelPost.getUid().equals(thisUser.getUid())) {
+                    if (!modelPost.getUid().equals(thisUser.getUid()) && !modelPost.getBookStatus().equals("SOLD") ) {
                         postList.add(modelPost);
                         //adapter
                         adapterPosts = new AdapterPosts(HomeActivity.this, postList);
@@ -167,27 +165,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ModelPost modelPost = ds.getValue(ModelPost.class);
 
 
-                    if(!modelPost.getUid().equals(thisUser.getUid())){
-                        if(modelPost.getBookTitle().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getBookDescription().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getBookPrice().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getBookAuthor().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getCollege().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getPostDate().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getPostTime().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                modelPost.getPublisher().toLowerCase().trim().contains(searchQuery.trim().toLowerCase())||
-                                (searchQuery.toLowerCase().trim().equals("free")&& modelPost.getBookPrice().trim().toLowerCase().equals("0"))
+                    if(!modelPost.getUid().equals(thisUser.getUid()) ){
+                    if(modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookAuthor().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getCollege().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPostDate().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPostTime().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getPublisher().toLowerCase().contains(searchQuery.toLowerCase())||
+                            modelPost.getBookEdition().toLowerCase().contains(searchQuery.toLowerCase())||
+                            (searchQuery.toLowerCase().equals("free")&& modelPost.getBookPrice().toLowerCase().equals("0"))
 
-                        ){
-                            postList.add(modelPost);
-                        }
-                      /*  else{
-                            //Toast.makeText(HomeActivity.this, "Sorry, No result match your search!", Toast.LENGTH_SHORT);
-                            searchNotFound.setVisibility(View.VISIBLE);
-                            searchNotFound.setText("Sorry, No result match your search!");
-                            searchNotFound.setVisibility(View.GONE);
-                        } */
-                    }
+                    ){
+                        postList.add(modelPost);
+                    }}
 
                     //adapter
                     adapterPosts = new AdapterPosts(HomeActivity.this,postList);
@@ -277,6 +269,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_heart:
                 Intent favorite = new Intent(HomeActivity.this, FavoriteActivity.class);
                 startActivity(favorite); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(HomeActivity.this, MyCustomersActivity.class);
+            startActivity(myCustomers); break;
             case R.id.nav_out:{
                 android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
                 alertDialogBilder.setTitle("Log out");

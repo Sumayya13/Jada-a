@@ -3,14 +3,9 @@ package com.example.jadaa;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -102,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     updateUI(user);
-                                    notification();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -211,27 +205,11 @@ public class MainActivity extends AppCompatActivity {
         Intent profileIntent = new Intent(getApplicationContext(), HomeActivity.class);
         profileIntent.putExtra("email", currentUser.getEmail());
         Intent add= new Intent(getApplicationContext(), AddPostActivity.class);
+        Intent paypal= new Intent(getApplicationContext(), PaypalActivity.class);
         add.putExtra("email", currentUser.getEmail());
+        paypal .putExtra("email", currentUser.getEmail());
         Log.v("DATA", currentUser.getUid());
         startActivity(profileIntent);
-    }
-
-    private void notification(){
-        String name = userEditText.getText().toString();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-
-            NotificationChannel channel =
-                    new NotificationChannel("n","n", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
-                .setContentText("Jada'a Application")
-                .setSmallIcon(R.drawable.add_post)
-                .setAutoCancel(true)
-                .setContentText("Time to add a new post!");
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(999, builder.build());
     }
 
 

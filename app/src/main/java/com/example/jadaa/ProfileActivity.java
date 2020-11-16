@@ -32,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,7 +45,7 @@ import android.widget.TextView;
 
 import java.util.regex.Pattern;
 
-public class ProfileActivity extends AppCompatActivity  {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener   {
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -61,10 +62,8 @@ public class ProfileActivity extends AppCompatActivity  {
     private DatabaseReference databaseReference;
     private EditText nameEditText, passwordEditText, confirmPassEditText;
     private EditText phoneEditText, emailEditText;
-    String name, phone1, email1;
-
    // Toolbar toolbar;
-
+String name ,phone1 ,email1; ///////////////////////////////////
     // private String email ;
     // private static final String USERS = "users";
 
@@ -85,8 +84,13 @@ public class ProfileActivity extends AppCompatActivity  {
         getSupportActionBar().setTitle("Profile");
 
         /*---------------------Hooks------------------------*/
-        navigationView = findViewById(R.id.nav_view);
-        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view );
+        drawerLayout = findViewById(R.id.drawer_layout );
+        toolbar = findViewById(R.id.toolbar);
+
+
+
+        /*---------------------Hooks------------------------*/
         email = findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         Name = findViewById(R.id.name);
@@ -128,19 +132,25 @@ public class ProfileActivity extends AppCompatActivity  {
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent pIntent = new Intent(getApplicationContext(), editActivity.class);
-                pIntent.putExtra("fullName", name);
-                pIntent.putExtra("phone", phone1);
-                pIntent.putExtra("email", email1);
-                startActivity(pIntent);
+            public void onClick(View view) { //////////////////////////////////////////////////
 
-                //startActivity(new Intent(ProfileActivity.this, editActivity.class));
+                Intent profileIntent = new Intent(getApplicationContext(), editActivity.class);
+                profileIntent.putExtra("fullName", name);
+                profileIntent.putExtra("phone", phone1);
+                profileIntent.putExtra("email", email1);
+                startActivity(profileIntent);
             }
         });
 
 
-
+        /*---------------------Navigation------------------------*/
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle=new
+                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_Profile);
 
         /*---------------------Navigation------------------------*/
    /*   navigationView.bringToFront();
@@ -219,4 +229,64 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
  */
+
+    /*---------------------to Open or close Navigation ------------------------*/
+    public void onBackPressed(){
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                Intent profile = new Intent(ProfileActivity.this, HomeActivity.class);
+                startActivity(profile); break;
+            case R.id.nav_Profile: break;
+            case R.id.nav_MyPost:
+                Intent myPost = new Intent(ProfileActivity.this, MyPostActivity.class);
+                startActivity(myPost); break;
+            case R.id.nav_order:  Intent profile1 = new Intent(ProfileActivity.this, MyOrderActivity.class);
+                startActivity(profile1); break;
+            case R.id.nav_heart:
+                Intent heart = new Intent(ProfileActivity.this, FavoriteActivity.class);
+                startActivity(heart); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(ProfileActivity.this, MyCustomersActivity.class);
+                startActivity(myCustomers); break;
+            case R.id.nav_out:
+                android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
+                alertDialogBilder.setTitle("Log out");
+                alertDialogBilder.setMessage("Are you sure you want to log out?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+
+                                FirebaseAuth.getInstance().signOut();
+                                finish();
+                                Intent logout = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(logout);
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
