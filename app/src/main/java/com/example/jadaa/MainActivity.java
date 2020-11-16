@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jadaa.adapters.AdapterMyPosts;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView registerTextView, forgetPassTextView;
     private EditText userEditText, passwordEditText;
     private ImageView logoImageView;
-    private Button loginButton;
+    private TextView loginButton;
     private String email, password;
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
@@ -41,16 +43,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*---------------------delete app bar ------------------------*/
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         registerTextView = findViewById(R.id.register_textview);
         forgetPassTextView = findViewById(R.id.forget_password_textview);
         userEditText = findViewById(R.id.emailogin_edittext);
         passwordEditText = findViewById(R.id.password_edittext);
-        logoImageView = findViewById(R.id.imageView);
         loginButton = findViewById(R.id.button);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World!");
+      //  FirebaseDatabase database = FirebaseDatabase.getInstance();
+      //  DatabaseReference myRef = database.getReference("message");
+      //  myRef.setValue("Hello, World!");
 
         //checking if user is logged in
         if (mAuth.getCurrentUser() != null) {
@@ -198,6 +204,10 @@ public class MainActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser) {
         Intent profileIntent = new Intent(getApplicationContext(), HomeActivity.class);
         profileIntent.putExtra("email", currentUser.getEmail());
+        Intent add= new Intent(getApplicationContext(), AddPostActivity.class);
+        Intent paypal= new Intent(getApplicationContext(), PaypalActivity.class);
+        add.putExtra("email", currentUser.getEmail());
+        paypal .putExtra("email", currentUser.getEmail());
         Log.v("DATA", currentUser.getUid());
         startActivity(profileIntent);
     }

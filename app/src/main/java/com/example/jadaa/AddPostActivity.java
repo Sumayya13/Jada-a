@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +61,7 @@ import java.util.regex.Pattern;
 
 
 public class AddPostActivity extends AppCompatActivity {
+
 
     private ImageView imageIv;
     private TextView heading, status,paymentOption;
@@ -107,10 +109,19 @@ public class AddPostActivity extends AppCompatActivity {
     String editTitle, editDescription, editImage, editBookAuthor, editBookEdition, editBookPrice, editCollege;
     RadioButton editRadioForFree, editRadioGetPaid;
 
+    String sold = "SOLD";
+    String bStatus;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+
+
+        /*---------------------delete app bar ------------------------*/
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //init permissions arrays
         cameraPermission= new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -133,7 +144,7 @@ public class AddPostActivity extends AppCompatActivity {
         radioGetPaid = findViewById(R.id.radio_getPaid);
         post = findViewById(R.id.post);
         college =(Spinner) findViewById(R.id.mySpinner);
-        
+
         //get data through intent from previous activity's adapter
         Intent intent = getIntent();
         final String isUpdateKey = ""+intent.getStringExtra("key");
@@ -142,13 +153,13 @@ public class AddPostActivity extends AppCompatActivity {
         if(isUpdateKey.equals("editPost")){
             //update
             //getSupportActionBar().setTitle("Update Post"); "causes error"
-            //post.setText("Update"); "causes error"
+            post.setText("Update");
             loadPostData(editPostId);
         }
         else{
             //add
             //getSupportActionBar().setTitle("Add New Post"); "causes error"
-            //post.setText("Post"); "causes error"
+            post.setText("Post");
 
         }
 
@@ -266,16 +277,23 @@ public class AddPostActivity extends AppCompatActivity {
                     description.setError("Book description is required!");
                 }
 
-               if(!checkEnteredData()) {
-                   return;
-               }
+                if(!checkEnteredData()) {
+                    return;
+                }
 
+                //&& !checkStatus()
                 if(isUpdateKey.equals("editPost")){
-                    beginUpdate(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
+                    if (checkSpaces()){
+                        beginUpdate(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
+                    }
+
                 }
-                else{
-                    uploadData(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val);
+                if(!isUpdateKey.equals("editPost")){
+                        //checkImageNotNull();
+                        //checkEnteredData();
+                        uploadData(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val);
                 }
+
 
 
                /* if(image_rui != null){
@@ -303,12 +321,142 @@ public class AddPostActivity extends AppCompatActivity {
 
     }//onCreate
 
+   /* private boolean checkStatus() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+        //get the details of post using the post id
+        Query fquery = reference.orderByChild("BookStatus").equalTo(sold);
+        fquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                bStatus = ""+dataSnapshot.child("BookStatus").getValue();
+
+
+                if(bStatus.equals(sold)){
+                    Toast.makeText(getApplicationContext(), "This book is sold\n the post can't be edited", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return true;
+    } */
+   private boolean checkSpaces() {
+       String title_val = BookTitle.getText().toString().trim();
+       String description_val = description.getText().toString().trim();
+       if(title_val.matches("")){
+           BookTitle.setError("Book title is required!");
+           return false;
+       }
+
+       if(description_val.matches("")){
+           description.setError("Book description is required!");
+           return false;
+       }
+       return true;
+   }
+
+    private boolean checkImageNotNull() {
+        if(image_rui == null){
+            Toast.makeText(AddPostActivity.this, "please insert an image", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     private void beginUpdate(String title_val, String description_val, String statusOption_val, String price_val, String bookAuthor_val, String bookEdition_val, String editPostId) {
         pd.setMessage("Updating Post...");
         pd.show();
         if(editImage != null){
             updateWasWithImage(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
         }
+        if(imageIv.getDrawable() != null){
+            updateWithNowImage(title_val, description_val, statusOption_val, price_val, bookAuthor_val, bookEdition_val, editPostId);
+        }
+
+    }
+
+    private void updateWithNowImage(final String title_val, final String description_val, final String statusOption_val, final String price_val, final String bookAuthor_val, final String bookEdition_val, final String editPostId) {
+        final String timeStamp = String.valueOf(System.currentTimeMillis());
+        String filePathAndName = "Posts/" +"post_" +timeStamp;
+
+        //get image from imageView
+        Bitmap bitmap = ((BitmapDrawable)imageIv.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //image compress
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference ref = FirebaseStorage.getInstance().getReference().child(filePathAndName);
+        ref.putBytes(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //image uploaded, get its url
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uriTask.isSuccessful());
+
+                        String downloadUri = uriTask.getResult().toString();
+                        if(uriTask.isSuccessful()){
+                            //url is received, upload to firebase database
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            //put post info
+                            hashMap.put("uid", uid);
+                            hashMap.put("Publisher", name);
+                            hashMap.put("uEmail", email);
+                            hashMap.put("BookTitle", title_val);
+                            hashMap.put("BookDescription", description_val);
+                            hashMap.put("BookImage", downloadUri);
+                            hashMap.put("BookStatus", statusOption_val);
+                            hashMap.put("BookPrice", price_val);
+                            hashMap.put("BookAuthor", bookAuthor_val);
+                            hashMap.put("BookEdition", bookEdition_val);
+                            hashMap.put("College", selectedItem);
+                            hashMap.put("CommentCounter", "0");
+
+                                          /*
+                                            hashMap.put("pId", timeStamp);
+                                            hashMap.put("pTime", timeStamp);
+                                            hashMap.put("PostDate", saveCurrentDate);
+                                            hashMap.put("PostTime", saveCurrentTime);
+                                            */
+
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+                            ref.child(editPostId)
+                                    .updateChildren(hashMap)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            pd.dismiss();
+                                            Toast.makeText(AddPostActivity.this,"Post Updated Successfully", Toast.LENGTH_SHORT).show();
+                                            Intent move_To_MyPost = new Intent(AddPostActivity.this, MyPostActivity.class);
+                                            startActivity(move_To_MyPost);
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Toast.makeText(AddPostActivity.this,""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                        }
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(AddPostActivity.this,""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -372,7 +520,8 @@ public class AddPostActivity extends AppCompatActivity {
                                                         public void onSuccess(Void aVoid) {
                                                             pd.dismiss();
                                                             Toast.makeText(AddPostActivity.this,"Post Updated Successfully", Toast.LENGTH_SHORT).show();
-
+                                                            Intent move_To_MyPost = new Intent(AddPostActivity.this, MyPostActivity.class);
+                                                            startActivity(move_To_MyPost);
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -428,6 +577,13 @@ public class AddPostActivity extends AppCompatActivity {
 
                     //Don't forget to edit the radio buttons and price accordingly "IMPORTANT"
 
+                    if(editBookPrice.equals("0")){
+                        radioForFree.setChecked(true);
+                    }
+                    else{
+                        radioGetPaid.setChecked(true);
+                    }
+
                     //set data to views
                     BookTitle.setText(editTitle);
                     description.setText(editDescription);
@@ -435,17 +591,19 @@ public class AddPostActivity extends AppCompatActivity {
                     BookEdition.setText(editBookEdition);
                     bookPrice.setText(editBookPrice);
 
+
+
                     //set image
                     if(!editImage.equals(null)){
                         try{
                             Picasso.get().load(editImage).into(imageIv);
                         } catch (Exception e) {
-                           // e.printStackTrace();
+                            // e.printStackTrace();
                         }
                     }
 
                     //set college
-                   for(int i=1; i<= 20; i++){
+                    for(int i=1; i<= 21; i++){
                         if(Objects.equals(editCollege, college.getItemAtPosition(i).toString())){
                             int position = i;
                             //college.setVerticalScrollbarPosition(position);
@@ -872,10 +1030,10 @@ public class AddPostActivity extends AppCompatActivity {
             return false;
         }
 
-        if(image_rui == null){
+      /*  if(image_rui == null){
             Toast.makeText(AddPostActivity.this, "please insert an image", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        } */
 
         if (selectedItem.equals("0") || selectedItem.equals("Choose College") || selectedItem.equals("") ) {
             Toast.makeText(AddPostActivity.this, "You have to select a college", Toast.LENGTH_SHORT).show();

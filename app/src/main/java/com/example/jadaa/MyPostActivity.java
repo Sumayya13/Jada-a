@@ -33,7 +33,9 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
     Toolbar toolbar;
     Menu menu;
+    LinearLayout linearLayout;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -71,6 +74,7 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
         drawerLayout = findViewById(R.id.drawer_layout );
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        linearLayout = findViewById(R.id.NoOrder);
 
 
         /*---------------------Recycle view ------------------------*/
@@ -122,6 +126,8 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
+
+                    linearLayout.setVisibility(View.INVISIBLE);
                     ModelMyPost modelMyPost = ds.getValue(ModelMyPost.class);
                     postList.add(modelMyPost);
                     //adapter
@@ -166,6 +172,7 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
                                 modelmyPost.getPostDate().toLowerCase().contains(searchQuery.toLowerCase())||
                                 modelmyPost.getPostTime().toLowerCase().contains(searchQuery.toLowerCase())||
                                 modelmyPost.getPublisher().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelmyPost.getBookEdition().toLowerCase().contains(searchQuery.toLowerCase())||
                                 (searchQuery.toLowerCase().equals("free")&& modelmyPost.getBookPrice().toLowerCase().equals("0"))
 
                         ){
@@ -265,6 +272,9 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_heart:
                 Intent heart = new Intent(MyPostActivity.this, FavoriteActivity.class);
                 startActivity(heart); break;
+            case R.id.nav_paople:
+                Intent myCustomers = new Intent(MyPostActivity.this, MyCustomersActivity.class);
+                startActivity(myCustomers); break;
             case R.id.nav_out:
                 android.app.AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(this);
                 alertDialogBilder.setTitle("Log out");
