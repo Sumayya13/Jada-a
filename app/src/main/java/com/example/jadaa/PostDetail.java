@@ -3,6 +3,7 @@ package com.example.jadaa;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
@@ -17,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jadaa.adapters.AdapterComments;
+import com.example.jadaa.adapters.AdapterPosts;
+import com.example.jadaa.models.ModelComment;
+import com.example.jadaa.models.ModelPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +58,9 @@ public class PostDetail extends AppCompatActivity {
 
     ProgressDialog pd ;
 
+    RecyclerView recyclerView;
+    List<ModelComment> postList;
+    AdapterComments adapterPosts;
 
 
     @Override
@@ -102,10 +111,58 @@ public class PostDetail extends AppCompatActivity {
            }
        });
 
+        /*---------------------Recycle view ------------------------*/
+        // recyclerView = View.findViewById(R.id.post_list);
+        recyclerView = findViewById(R.id.post_list);
+        // LinearLayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(PostDetail.this);
+        //show news =t posts first , for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init  post list
+        postList = new ArrayList<>();
+        loadPosts();
 
 
 
     }// create
+
+
+    private void loadPosts() {
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comment");
+        //get all from this
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds: snapshot.getChildren() ){
+                    ModelComment modelPost = ds.getValue(ModelComment.class);
+
+                        postList.add(modelPost);
+                        //adapter
+                        adapterPosts = new AdapterComments(PostDetail.this, postList);
+                        //set adapter to recycler view
+                        recyclerView.setAdapter(adapterPosts);
+                        adapterPosts.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //in case of error
+                Toast.makeText(PostDetail.this,""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
 
     private void loadPostInfo() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
