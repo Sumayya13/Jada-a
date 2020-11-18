@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +51,8 @@ public class PostDetail extends AppCompatActivity {
     private DatabaseReference userDbRef;
     private FirebaseAuth mAuth;
 
-    ImageView uPictureIv,pImageIv ;
-    TextView nameTv, pTimeTiv , pTitleTv ,pDescriptionTv ;
+    //ImageView uPictureIv,pImageIv ;
+   // TextView nameTv, pTimeTiv , pTitleTv ,pDescriptionTv ;
     EditText commentEt ;
     ImageButton sendBtn ;
     ImageView cAvatarIv ;
@@ -61,7 +62,7 @@ public class PostDetail extends AppCompatActivity {
     RecyclerView recyclerView;
     List<ModelComment> postList;
     AdapterComments adapterPosts;
-
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,23 +78,22 @@ public class PostDetail extends AppCompatActivity {
         postId = intent.getStringExtra("postId");
 
 
-        uPictureIv = findViewById(R.id.uPictureIv);
-        pImageIv = findViewById(R.id.pImageIv);
-        nameTv = findViewById(R.id.uNameTv);
-        pTimeTiv = findViewById(R.id.pTimeTv);
-        pTitleTv = findViewById(R.id.pTitle);
+       //uPictureIv = findViewById(R.id.uPictureIv);
+       // pImageIv = findViewById(R.id.pImageIv);
+       // nameTv = findViewById(R.id.uNameTv);
+       // pTimeTiv = findViewById(R.id.pTimeTv);
+       // pTitleTv = findViewById(R.id.pTitle);
 
-        pDescriptionTv = findViewById(R.id.pDescriptionTv);
+        // pDescriptionTv = findViewById(R.id.pDescriptionTv);
 
         commentEt = findViewById(R.id.commentEt);
         sendBtn = findViewById(R.id.sendBtn);
         cAvatarIv = findViewById(R.id.cAvatarIv);
-
+        linearLayout = findViewById(R.id.NoOrder);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // move to previous page using toolbar
-        getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +102,8 @@ public class PostDetail extends AppCompatActivity {
             }
         });
 
-        loadPostInfo();
+
+       // loadPostInfo();
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -142,6 +143,9 @@ public class PostDetail extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
+                   // linearLayout.setVisibility(View.INVISIBLE);
+
+                    linearLayout.setVisibility(View.INVISIBLE);
                     ModelComment modelPost = ds.getValue(ModelComment.class);
 
                         postList.add(modelPost);
@@ -163,7 +167,7 @@ public class PostDetail extends AppCompatActivity {
 
     }
 
-
+/*
     private void loadPostInfo() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
         Query query = ref.orderByChild("pId").equalTo(postId);
@@ -237,6 +241,8 @@ public class PostDetail extends AppCompatActivity {
             }
         });
     }
+
+    */
 
     private void postComment() {
 

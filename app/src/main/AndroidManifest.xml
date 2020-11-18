@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".PostDetail"></activity>
+        <activity android:name=".notification_Settings"></activity>
+        <activity android:name=".PostDetail" />
         <activity android:name=".myCustomersDetails" />
         <activity android:name=".MyOrderDetailsActivity" />
         <activity
@@ -51,7 +52,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_main2"
+            android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AddPostActivity" />
         <activity android:name=".RegisterActivity" />

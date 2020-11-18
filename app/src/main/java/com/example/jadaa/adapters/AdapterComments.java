@@ -20,6 +20,8 @@ import com.example.jadaa.User;
 import com.example.jadaa.ViewPostActivity;
 import com.example.jadaa.models.ModelComment;
 import com.example.jadaa.models.ModelPost;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,9 +64,17 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.MyHold
         final String commentDate = postList.get(i).getCommentDate();
 
 
-myHolder.pTimeTv.setText(commentDate+" "+commentTime);
+myHolder.pTimeTv.setText(commentDate+"  "+commentTime);
 myHolder.pTitle.setText(comment);
 
+
+
+// to view or hide delete button
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        if( !uid.equals(thisUser.getUid())) {
+            myHolder.deleteCommentIv.setVisibility(View.INVISIBLE);
+            myHolder.deleteCommentIv.setClickable(false);
+        }
 
 
 
@@ -97,10 +107,6 @@ myHolder.pTitle.setText(comment);
 
 
 
-
-
-
-
     }
 
     @Override
@@ -113,7 +119,7 @@ myHolder.pTitle.setText(comment);
     class MyHolder extends RecyclerView.ViewHolder{
 
         //views from row_posts.xml
-        ImageView uPictureIv;
+        ImageView uPictureIv,deleteCommentIv ;
         TextView uNameTv, pTimeTv, pTitle;
 
 
@@ -125,7 +131,7 @@ myHolder.pTitle.setText(comment);
             uNameTv = itemView.findViewById(R.id.uNameTv);
             pTimeTv = itemView.findViewById(R.id.pTimeTv);
             pTitle = itemView.findViewById(R.id.comment);
-
+            deleteCommentIv =itemView.findViewById(R.id.deleteComment);
 
         }
     }
