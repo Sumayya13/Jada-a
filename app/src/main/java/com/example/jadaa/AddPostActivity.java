@@ -216,10 +216,6 @@ public class AddPostActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 selectedItem = adapterView.getItemAtPosition(position).toString();
                 //Toast.makeText(AddPostActivity.this, selectedItem, Toast.LENGTH_SHORT).show();
-
-
-
-
             }
             //         // if user does not choose any one I will print msg
             @Override
@@ -415,7 +411,6 @@ public class AddPostActivity extends AppCompatActivity {
                             hashMap.put("BookAuthor", bookAuthor_val);
                             hashMap.put("BookEdition", bookEdition_val);
                             hashMap.put("College", selectedItem);
-                            hashMap.put("CommentCounter", "0");
 
                                           /*
                                             hashMap.put("pId", timeStamp);
@@ -788,6 +783,8 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
+   /* private void prepareNotification (String pId, String title_val, String description_val, String notificationType, String notificationTopic){
+    } */
     private void showImagePickDialog() {
         //options {camera, gallery} to show in dialog
         String[] options = {"Camera", "Gallery"};
