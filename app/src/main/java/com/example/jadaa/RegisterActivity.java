@@ -102,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 //final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
-                user = new User(email, password, fullName, phone);
+                user = new User(email, password, fullName, phone,"","","","0","0","0","0","0","0");
                 registerUser();
             }
         });
@@ -211,6 +211,8 @@ public class RegisterActivity extends AppCompatActivity {
         String keyId = mDatabase.push().getKey();
         assert keyId != null;
         mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user); //adding user info to database
+       // mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("image").setValue(""); //adding user info to database
+      //  mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("image").setValue(""); //adding user info to database
         Intent loginIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(loginIntent);
     }

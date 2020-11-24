@@ -28,7 +28,7 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
 
     ImageView TbookImage ,order_detail2 ,track;
-    TextView order_status ,order_dateT ,TBookTitle ,TbookPrice,confirm_order,order_detail,Tedition,Tauther_name,Tcollege,TorderID,orderStatus;
+    TextView order_status ,order_dateT ,TBookTitle ,TbookPrice,confirm_order,order_detail,Tedition,Tauther_name,Tcollege,TorderID,orderStatus,total;
 
 
 
@@ -67,9 +67,9 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         order_dateT= (TextView) findViewById(R.id.order_date);
         track =  findViewById(R.id.track);
         orderStatus =findViewById(R.id.status);
+        total=findViewById(R.id.total);
 
-
-        String title,des,price,pAuth,uid,pStatus,pImage,pid;
+        String title,des,price,pAuth,uid,pStatus,pImage,pid,TotalPayment;
         String purchaseDate,purchaseTime, processing,shipped,inTransit,delivered,uri,BookPrice,BookTitle,BookAuthor,BookEdition;
 
         final Bundle extras = getIntent().getExtras();
@@ -86,13 +86,14 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         BookPrice =extras.getString("BookPrice");
         BookAuthor = extras.getString("BookAuthor");
         BookEdition =  extras.getString("BookEdition");
-
+        TotalPayment=  extras.getString("TotalPayment");
 
         TorderID.setText("#"+pid);  // يشتغل
         order_dateT.setText( purchaseDate+" "+purchaseTime); // يشتغل
         TBookTitle.setText(BookTitle);
         Tedition.setText("Edition "+BookEdition);
         Tauther_name.setText(BookAuthor);
+        total.setText(" "+TotalPayment);
 
         try{
             Picasso.get().load(uri).into(TbookImage);
@@ -109,31 +110,30 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
 
 
-
         // بأعرض اللون للحالة الطلب
 
         if (delivered.equals("1"))// not delivered yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.all));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.allstat2_removebg_preview));
             orderStatus.setText("delivered");
         }else
         if (inTransit.equals("1"))  // not in Transit yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_home));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.totransit2_removebg_preview));
             orderStatus.setText("inTransit");
         }else
         if (shipped.equals("1"))  // not shipped yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_in_transit));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.ship2));
             orderStatus.setText("shipped");
         }else
 
         if (processing.equals("1"))  // not shipped yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_shipped));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.proc2));
             orderStatus.setText("processing");
         } else {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_processing));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.order2));
             orderStatus.setText("Ordered");
         }
 

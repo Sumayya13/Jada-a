@@ -19,13 +19,23 @@
 
 
         <LinearLayout
-            android:layout_width="256dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Status:"
+                android:textColor="#130101"
+                android:textSize="14dp"></TextView>
 
             <TextView
                 android:id="@+id/orderstatus"
@@ -150,54 +160,55 @@
 
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="end"
-            android:orientation="horizontal">
 
-
-
-
-        </LinearLayout>
 
 
 
         <LinearLayout
             android:gravity="end"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-           >
+            android:layout_height="match_parent"
+android:layout_margin="10dp"           >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_gravity="start"
-                android:layout_height="match_parent">
+
+
             <TextView
                 android:id="@+id/confirm_order"
-                android:visibility="invisible"
-                android:layout_width="156dp"
+                android:visibility="visible"
+                android:layout_width="160dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
                 android:background="#1473BD"
                 android:gravity="center"
-                android:text="order confirmation"
+                android:text="Order Confirmation"
+                android:padding="5dp"
                 android:textColor="#F8F5F5"
                 android:textSize="16dp"
-                android:textStyle="bold" />
-            </LinearLayout>
+                android:textStyle="" />
+
+           <TextView
+               android:id="@+id/resale"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="Resale"
+               android:background="#1473BD"
+               android:gravity="center"
+
+               android:layout_marginStart="5dp"
+               android:padding="5dp"
+               android:textColor="#F8F5F5"
+               android:textSize="16dp"
+               android:textStyle=""
+               android:layout_marginLeft="5dp" />
+
             <TextView
                 android:id="@+id/order_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:gravity="right"
-                android:text="order detail "
+
+                android:gravity="right|center_vertical"
+                android:text="Order Detail "
                 android:textSize="16dp" />
 
             <ImageView

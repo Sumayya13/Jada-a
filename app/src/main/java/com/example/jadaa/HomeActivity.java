@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Toolbar toolbar;
     Menu menu;
+    ImageView noty ;
 
     RecyclerView recyclerView;
     List<ModelPost> postList;
@@ -83,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view );
         drawerLayout = findViewById(R.id.drawer_layout );
         setSupportActionBar(toolbar);
-
+        noty = findViewById(R.id.noty );
 
         /*---------------------Navigation------------------------*/
         navigationView.bringToFront();
@@ -96,7 +98,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
 
 
-
+        noty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewSingle = new Intent(HomeActivity.this, notification_Settings.class);
+                startActivity(viewSingle);
+            }
+        });
 
         // if want to hide item of navigation
         /* menu = navigationView.getMenu();
@@ -258,11 +266,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.nav_home: break;
             case R.id.nav_Profile:
-                Intent profile = new Intent(HomeActivity.this, ProfileActivity.class);
+                Intent profile = new Intent(HomeActivity.this, ProfileMyPosts.class);
                 startActivity(profile); break;
-            case R.id.nav_MyPost:
-                Intent myPost = new Intent(HomeActivity.this, MyPostActivity.class);
-                startActivity(myPost); break;
+
             case R.id.nav_order:
                 Intent myOrder = new Intent(HomeActivity.this, MyOrderActivity.class);
                 startActivity(myOrder); break;

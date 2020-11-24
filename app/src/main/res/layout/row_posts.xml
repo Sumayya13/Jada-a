@@ -4,14 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="13dp"
+
+    app:cardCornerRadius="10dp"
     app:cardElevation="3dp"
     android:padding="5dp"
     android:layout_margin="5dp"
-    app:cardUseCompatPadding="true"
+
     app:cardBackgroundColor="@android:color/white"
     >
-
+<!--     app:cardCornerRadius="13dp"
+    app:cardElevation="3dp"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    app:cardUseCompatPadding="true"-->
 
 
 
@@ -36,7 +41,10 @@
                 android:layout_height="50dp"
                 android:src="@drawable/user1"
                 android:layout_margin="5dp"
-                android:scaleType="centerCrop">
+                android:scaleType="centerCrop"
+
+
+                >
         </de.hdodenhof.circleimageview.CircleImageView>
 
             <LinearLayout
@@ -218,6 +226,8 @@
             android:drawablePadding="5dp"
             android:background="#00F6F6F8"
             tools:ignore="VectorDrawableCompat" />
+
+
 
     </LinearLayout>
 

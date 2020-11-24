@@ -2,6 +2,7 @@ package com.example.jadaa.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jadaa.PostDetail;
@@ -84,6 +86,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -91,8 +94,16 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                     User user = dataSnapshot.getValue(User.class);
 
                     String name =user.getFullName() ;
-
+                    String image= user.getImage();
                     myHolder.uNameTv.setText(name);
+
+                    try{
+                        if (image!= null || image!= ""||image!= " " )
+                        Picasso.get().load(user.getImage()).into(myHolder.uPictureIv);
+                    }
+                    catch (Exception e){
+                        myHolder.uPictureIv.setImageDrawable(context.getDrawable(R.drawable.user1));
+                    }
 
 
                 }
@@ -201,9 +212,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
 
 
         try{
-            //  Picasso.get().load(pImage).into(myHolder.pImageIv);
             Picasso.get().load(pImage).into(myHolder.pImageIv);
-           // myHolder.pImageIv.setImageURI(Uri.parse(pImage));
         }
         catch (Exception e){
         }
