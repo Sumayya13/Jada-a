@@ -34,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jadaa.models.ModelPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -71,6 +72,9 @@ public class AddPostActivity extends AppCompatActivity {
     private RadioButton radioAvailable, radioUnavailable, radioForFree, radioGetPaid;
     private Spinner college;
 
+    String NumAllBooks;
+    int NumAllBooksInt;
+
     //Permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -90,7 +94,7 @@ public class AddPostActivity extends AppCompatActivity {
     // private Uri imageUri; /*delete*/
 
     private DatabaseReference userDbRef;
-    // private StorageReference mStorage;
+    // private ;
     private FirebaseAuth mAuth;
     // private String currentUserId;
     //  private ProgressDialog progressDialog; /*Delete this*/
@@ -162,6 +166,10 @@ public class AddPostActivity extends AppCompatActivity {
             post.setText("Post");
 
         }
+
+
+
+
 
 
         //get some user info to include in the post
@@ -321,29 +329,6 @@ public class AddPostActivity extends AppCompatActivity {
 
     }//onCreate
 
-   /* private boolean checkStatus() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
-        //get the details of post using the post id
-        Query fquery = reference.orderByChild("BookStatus").equalTo(sold);
-        fquery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                bStatus = ""+dataSnapshot.child("BookStatus").getValue();
-
-
-                if(bStatus.equals(sold)){
-                    Toast.makeText(getApplicationContext(), "This book is sold\n the post can't be edited", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return true;
-    } */
    private boolean checkSpaces() {
        String title_val = BookTitle.getText().toString().trim();
        String description_val = description.getText().toString().trim();
@@ -382,6 +367,12 @@ public class AddPostActivity extends AppCompatActivity {
     private void updateWithNowImage(final String title_val, final String description_val, final String statusOption_val, final String price_val, final String bookAuthor_val, final String bookEdition_val, final String editPostId) {
         final String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" +"post_" +timeStamp;
+
+
+
+
+
+
 
         //get image from imageView
         Bitmap bitmap = ((BitmapDrawable)imageIv.getDrawable()).getBitmap();
@@ -624,6 +615,76 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     private void uploadData(final String title_val, final String description_val, final String statusOption_val, final String price_val, final String bookAuthor_val, final String bookEdition_val) {
+
+
+/*
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference d = FirebaseDatabase.getInstance().getReference("users").child(thisUser.getUid());
+
+        final HashMap<Object, String> hashMap;
+        hashMap = new HashMap<>();
+        d.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    User user = ds.getValue(User.class);
+
+                    //get Data
+                   NumAllBooks = user.getNumAllBooks();
+                   NumAllBooksInt= Integer.valueOf(NumAllBooks);
+                 //   NumAllBooksInt++;
+                    NumAllBooks= String.valueOf(1+NumAllBooksInt);
+
+                    hashMap.put("numAllBooks",NumAllBooks);
+                    d.setValue(hashMap);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+*/
+
+        
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();// to show other post
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref2 = database.getReference("users").child(thisUser.getUid());
+        final boolean[] flag = {true};
+        // Attach a listener to read the data at our posts reference
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                // count num of all books
+                if (flag[0]) {
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    String numAllBooks = user.getNumAllBooks();
+                    int numAllBooksInt = Integer.valueOf(numAllBooks);
+                    numAllBooksInt = numAllBooksInt + 1;
+
+
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+                    ref.child(thisUser.getUid()).child("numAllBooks").setValue(String.valueOf(numAllBooksInt));
+                    flag[0] = false;
+                }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
         //Date & Time
         Calendar calFordDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
@@ -688,6 +749,9 @@ public class AddPostActivity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+
+
+
                                                 //added in the database
                                                 pd.dismiss();
                                                 Toast.makeText(AddPostActivity.this, "Posted Successfully", Toast.LENGTH_SHORT).show();
@@ -701,6 +765,10 @@ public class AddPostActivity extends AppCompatActivity {
                                                 BookEdition.setText("");
                                                 imageIv.setImageURI(null);
                                                 image_rui = null;
+
+
+
+
 
 
                                             }
@@ -899,120 +967,6 @@ public class AddPostActivity extends AppCompatActivity {
         checkUserStatus();
     }
 
-
-  /*  public void startPosting() {
-
-        final String title_val = BookTitle.getText().toString().trim();
-        final String description_val = description.getText().toString().trim();
-        final String statusOption_val = "available";
-        final String price_val;
-        String bookAuthor_val = BookAuthor.getText().toString().trim();
-        String bookEdition_val = BookEdition.getText().toString().trim();
-        //String radioAvailable_val = radioAvailable.getText().toString().trim();
-        //String radioUnavailable_val = radioUnavailable.getText().toString().trim();
-        //String radioForFree_val = radioForFree.getText().toString().trim();
-        //String radioGetPaid_val = radioGetPaid.getText().toString().trim();
-        //String bookPrice_val = bookPrice.getText().toString().trim();
-
-
-
-        if(radioForFree.isChecked()){
-            price_val = "0";
-            bookPrice.setVisibility(View.GONE);
-        } else{
-            price_val = bookPrice.getText().toString().trim();
-        }
-
-        if (isEmpty(BookAuthor)) {
-            bookAuthor_val = "Unknown";
-        }
-
-        if (isEmpty(BookEdition)) {
-            bookEdition_val = "Unknown";
-        }
-
-        checkEnteredData();
-
-
-
-        if(!TextUtils.isEmpty(title_val) && !TextUtils.isEmpty(description_val) && imageUri != null
-                &&  !TextUtils.isEmpty(price_val)){
-            progressDialog.setMessage("Posting... ");
-            progressDialog.show();
-            StorageReference filePath = mStorage.child("Posts_Images").child(imageUri.getLastPathSegment());
-            final String finalBookAuthor_val = bookAuthor_val;
-            final String finalBookEdition_val = bookEdition_val;
-            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Get a URL to the uploaded content
-                     //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-                    //Wrong method but the correct one resulted in an error
-                 Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-
-                    //Date & Time
-                    Calendar calFordDate = Calendar.getInstance();
-                    SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
-                    saveCurrentDate = currentDate.format(calFordDate.getTime());
-
-                    Calendar calFordTime = Calendar.getInstance();
-                    SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
-                    saveCurrentTime = currentTime.format(calFordDate.getTime());
-
-                      String postKey= saveCurrentDate+saveCurrentTime;
-
-
-                      //Query query = databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    Query fquery = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserId);
-                    fquery.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists())
-                            {
-                                userName = snapshot.child("fullName").getValue().toString();
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
-  String timestamp = String.valueOf(System.currentTimeMillis());
-
-                    //The push method here creates a unique random ID for the post
-                    DatabaseReference newPost = mDatabase.push();
-                    newPost.child("pId").setValue(timestamp);
-                    newPost.child("BookTitle").setValue(title_val);
-                    newPost.child("BookDescription").setValue(description_val);
-                    newPost.child("BookImage").setValue(String.valueOf(downloadUrl));
-                    newPost.child("BookStatus").setValue(statusOption_val);
-                    newPost.child("BookPrice").setValue(price_val);
-                    newPost.child("uid").setValue(currentUserId );
-                    newPost.child("College").setValue(selectedItem);
-                    newPost.child("BookAuthor").setValue(finalBookAuthor_val);
-                    newPost.child("BookEdition").setValue(finalBookEdition_val);
-                    newPost.child("PostDate").setValue(saveCurrentDate);
-                    newPost.child("PostTime").setValue(saveCurrentTime);
-                    newPost.child("Publisher").setValue(userName);
-
-
-                    progressDialog.dismiss();
-                    Toast.makeText(AddPostActivity.this, "Posted Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddPostActivity.this, HomeActivity.class));
-
-
-                }
-            });
-
-
-        }
-
-    } */
-
     private boolean checkEnteredData() {
         if (isEmpty(BookTitle)) {
             BookTitle.setError("Book title is required!");
@@ -1042,22 +996,10 @@ public class AddPostActivity extends AppCompatActivity {
         return true;
     }
 
-
     boolean isEmpty(EditText text) {
         CharSequence str = text.getText().toString();
         return TextUtils.isEmpty(str);
     }
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == STORAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            imageUri = data.getData();
-            bookImage.setImageURI(imageUri);
-        }
-
-    } */
-
 
     //handle permission results
     @Override

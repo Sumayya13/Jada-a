@@ -9,6 +9,6 @@
     <color name="Darkblue">#73CEEC</color>
 
 
-    <color name="mtrl_textinput_default_box_stroke_color" override="true">#DBC6DA</color>
+    <color name="mtrl_textinput_default_box_stroke_color" override="true">#8F2C8B</color>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.jadaa.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.jadaa.HomeActivity;
 import com.example.jadaa.MyOrderActivity;
 import com.example.jadaa.MyOrderDetailsActivity;
 import com.example.jadaa.R;
+import com.example.jadaa.User;
 import com.example.jadaa.ViewPostActivity;
 import com.example.jadaa.models.ModelPost;
 import com.example.jadaa.models.soldBooks;
@@ -75,7 +78,7 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         final String orderConfirmation = postList.get(i).getOrderConfirmation();
         final String BookAuthor = postList.get(i).getBookAuthor();
         final String BookEdition= postList.get(i).getBookEdition();
-
+        final String TotalPayment= postList.get(i).getTotalPayment();
 
 
         // بأعرض آخر حالة للطلب
@@ -95,6 +98,86 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         }else  myHolder.orderstatusT.setText("ordered");
 
 
+
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("soldBooks").child(pId);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    soldBooks user = dataSnapshot.getValue(soldBooks.class);
+
+                    String confirmation =user.getOrderConfirmation() ;
+
+                    if (orderConfirmation.equals("1"))
+                    {
+
+                        myHolder.confirm_order.setClickable(false);
+                        //myHolder.confirm_order.setBackgroundColor(FFD4D9DD);
+                        myHolder.confirm_order.setBackgroundColor(Color.parseColor("#E6E6E6"));
+                        myHolder.confirm_order.setTextColor(Color.parseColor("#888888"));
+
+
+                    }
+
+
+                    if (orderConfirmation.equals("0")) {
+
+                        myHolder.confirm_order.setVisibility(View.VISIBLE);
+                        myHolder.confirm_order.setClickable(true);
+                        myHolder.confirm_order.setBackgroundColor(Color.parseColor("#1473BD"));
+                        myHolder.confirm_order.setTextColor(Color.parseColor("#F8F5F5"));
+
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+        myHolder.confirm_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (orderConfirmation.equals("0")) { // صفر يعني لم يتم تأكيد الطلب بعد
+
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                    ref.child(pId).child("orderConfirmation").setValue("1");
+
+                    Toast.makeText(context,"The order has been confirmed",Toast.LENGTH_SHORT).show();
+
+                }
+
+
+            }
+        });
+
+
+
+        myHolder.resale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (orderConfirmation.equals("0")) { // صفر يعني لم يتم تأكيد الطلب بعد
+
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                    ref.child(pId).child("Resale").setValue("1");
+
+                    Toast.makeText(context,"The order has been confirmed",Toast.LENGTH_SHORT).show();
+
+                }
+
+
+            }
+        });
 
 
 /*
@@ -235,32 +318,6 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
 */
 
 
-
-
-
-
-
-
-        myHolder.confirm_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (orderConfirmation.equals("false")) { // صفر يعني لم يتم تأكيد الطلب بعد
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                    ref.child(pId).child("orderConfirmation").setValue("true");
-
-                    myHolder.confirm_order.setVisibility(View.INVISIBLE);
-                    myHolder.confirm_order.setClickable(false);
-
-
-                    Toast.makeText(context,"The order has been confirmed",Toast.LENGTH_LONG).show();
-                //    Toast.makeText(AdapterMyOrder.class, "Cancel", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-
         myHolder.order_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,6 +336,7 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
                 viewSingle.putExtra("BookPrice", BookPrice);
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
+                viewSingle.putExtra("TotalPayment", TotalPayment);
 
                 context.startActivity(viewSingle);
 
@@ -286,7 +344,7 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
 
         });
 
-
+/*
 // لازم اغيرها بحيث اجيب سناب شوت واشوف القيمة
         Query fquery = FirebaseDatabase.getInstance().getReference("soldBooks").child(pId).orderByChild("delivered").equalTo("0");
         fquery.addValueEventListener(new ValueEventListener() {
@@ -306,6 +364,8 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
 
 
 
+ */
+
 
 
     }
@@ -322,7 +382,7 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
         //views from row_posts.xml
         ImageView processingT ,shippedT,in_transitT,deliveredT;
         ImageView bookImage ,order_detail2;
-        TextView order_status , order_date ,BookTitle ,bookPrice,confirm_order,order_detail,orderstatusT ;
+        TextView order_status , order_date ,BookTitle ,bookPrice,confirm_order,order_detail,orderstatusT ,total,resale;
 
 
         public MyHolder(@NonNull View itemView) {
@@ -341,6 +401,8 @@ public class AdapterMyOrder extends RecyclerView.Adapter<AdapterMyOrder.MyHolder
             confirm_order = itemView.findViewById(R.id.confirm_order);
             order_detail = itemView.findViewById(R.id.order_detail);
             orderstatusT = itemView.findViewById(R.id.orderstatus);
+            total= itemView.findViewById(R.id.total);
+            resale = itemView.findViewById(R.id.resale);
 
         }
     }

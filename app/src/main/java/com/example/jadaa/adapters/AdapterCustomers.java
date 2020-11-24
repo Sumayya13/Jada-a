@@ -86,13 +86,18 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
         final String orderConfirmation = postList.get(i).getOrderConfirmation();
         final String BookAuthor = postList.get(i).getBookAuthor();
         final String BookEdition= postList.get(i).getBookEdition();
+        final String TotalPayment= postList.get(i).getTotalPayment();
+
 
         myHolder.Torder_ID.setText(pId);
 
         myHolder.TBookTitle.setText(BookTitle);
         myHolder.TbookAuther.setText(BookAuthor);
         myHolder.TbookEdition.setText("Edition "+BookEdition);
-        //myHolder.Torder_ID.setText(pId);
+
+
+
+
 
         if (BookPrice.equals("0"))
             myHolder.TbookPrice.setText("Book is free");
@@ -186,6 +191,8 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
                 viewSingle.putExtra("purchaserID", purchaserID);
+                viewSingle.putExtra("TotalPayment", TotalPayment);
+
                 //   viewSingle.putExtra("purchaserName", name);
 
               //  viewSingle.putExtra("purchaserPhone", phone1);
@@ -213,7 +220,9 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
                 viewSingle.putExtra("purchaserID", purchaserID);
-             //   viewSingle.putExtra("purchaserName", name);
+                viewSingle.putExtra("TotalPayment", TotalPayment);
+
+                //   viewSingle.putExtra("purchaserName", name);
               //  viewSingle.putExtra("purchaserPhone", phone1);
                 context.startActivity(viewSingle);
             }

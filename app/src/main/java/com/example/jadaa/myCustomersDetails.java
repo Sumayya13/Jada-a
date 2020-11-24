@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 public class myCustomersDetails extends AppCompatActivity {
 
-    TextView Tvorder_ID ,TvBookTitle ,Tvauther_name ,Tvedition ,TvbookPrice ,TvpurchaserName ,TvpurchaserPhone , Tvorder_date ;
+    TextView Tvorder_ID ,TvBookTitle ,Tvauther_name ,Tvedition ,TvbookPrice ,TvpurchaserName ,TvpurchaserPhone , Tvorder_date,total ;
     String purchaserPhone ,purchaserName;
     ImageView IvbookImage;
 
@@ -28,7 +32,7 @@ public class myCustomersDetails extends AppCompatActivity {
     TextView TvProcessing , Tvshipped , TvinTransit, Tvdelivered;
     ImageView IvProcessing , Ivshipped ,IvinTransit ,  Ivdelivered;
 
-    String purchaseDate,purchaseTime, processing,shipped,inTransit,delivered,uri,BookPrice,BookTitle,BookAuthor,BookEdition,purchaserID;
+    String purchaseDate,purchaseTime, processing,shipped,inTransit,delivered,uri,BookPrice,BookTitle,BookAuthor,BookEdition,purchaserID,TotalPayment;
 
     @SuppressLint("NewApi")
     @Override
@@ -54,7 +58,7 @@ public class myCustomersDetails extends AppCompatActivity {
             }
         });
 
-
+        total= findViewById(R.id.total);
         Tvorder_ID = (TextView) findViewById(R.id.order_ID);
         IvbookImage = findViewById(R.id.bookImage);
         TvBookTitle = (TextView) findViewById(R.id.BookTitle);
@@ -101,11 +105,12 @@ public class myCustomersDetails extends AppCompatActivity {
         BookAuthor = extras.getString("BookAuthor");
         BookEdition = extras.getString("BookEdition");
         purchaserID = extras.getString("purchaserID");
+        TotalPayment=  extras.getString("TotalPayment");
+
         //purchaserPhone = extras.getString("purchaserPhone");
         //purchaserName = extras.getString("purchaserName");
 
 
-        // Get a reference to our posts
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -127,9 +132,7 @@ public class myCustomersDetails extends AppCompatActivity {
                     // System.out.println(post);
 
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
@@ -159,6 +162,46 @@ public class myCustomersDetails extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (processing.equals("0")) {
+                    AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(myCustomersDetails.this);
+                   // alertDialogBilder.setTitle("Log out");
+                    alertDialogBilder.setMessage("Are you sure you want to set order status is processing" +
+                            " you cant undo if you click yes ?")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // close the dialog
+                                }
+                            })
+                            .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int id) {
+
+                                    IvProcessing.setImageDrawable(getApplicationContext().getDrawable(R.drawable.processing_status));
+                                    processing = "1";
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                                    ref.child(pid).child("processing").setValue(processing);
+
+                                }
+                            });
+
+
+                    AlertDialog alertDialog = alertDialogBilder.create();
+                    alertDialog.show();
+
+                }
+
+            }
+        });
+
+
+        /*
+            // أغير اللون من الرصاصي
+        IvProcessing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (processing.equals("0")) {
                     IvProcessing.setImageDrawable(getApplicationContext().getDrawable(R.drawable.processing_status));
                     processing = "1";
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
@@ -177,6 +220,7 @@ public class myCustomersDetails extends AppCompatActivity {
 
             }
         });
+         */
 
 
         /*
@@ -278,12 +322,13 @@ public class myCustomersDetails extends AppCompatActivity {
 
  */
 
-
         //_____________________ set data
         Tvorder_ID.setText("#" + pid);
         TvBookTitle.setText(BookTitle);
         Tvedition.setText("Edition " + BookEdition);
         Tvauther_name.setText(BookAuthor);
+        // Get a reference to our posts
+        total.setText(TotalPayment);
 
         try {
             Picasso.get().load(uri).into(IvbookImage);
@@ -384,27 +429,44 @@ if (processing.equals("0")) {
                     {
                         // لو shiped طافيه اشغلها
                         if (shipped.equals("0")) {
-                            Ivshipped.setImageDrawable(getApplicationContext().getDrawable(R.drawable.shipped__status));
-                            shipped = "1";
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                            ref.child(pid).child("shipped").setValue(shipped);
+
+
+                            AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(myCustomersDetails.this);
+                            // alertDialogBilder.setTitle("Log out");
+                            alertDialogBilder.setMessage("Are you sure you want to set order status is shipped" +
+                                    " you cant undo if you click yes ?")
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // close the dialog
+                                        }
+                                    })
+                                    .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int id) {
+
+                                            Ivshipped.setImageDrawable(getApplicationContext().getDrawable(R.drawable.shipped__status));
+                                            shipped = "1";
+                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                                            ref.child(pid).child("shipped").setValue(shipped);
+
+                                        }
+                                    });
+
+
+                            AlertDialog alertDialog = alertDialogBilder.create();
+                            alertDialog.show();
+
+
+
+
                         }
 
 
 
                     }
 
-// لو الترانز
-                }else  //لكن لازم الترانزت تكون طافيه اعشان اطفي الشبد
-                    if (shipped.equals("1") && inTransit.equals("0")) {
-                        Ivshipped.setImageDrawable(getApplicationContext().getDrawable(R.drawable.gray));
-                        shipped = "0";
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                        ref.child(pid).child("shipped").setValue(shipped);
-                    }
-
-                if (shipped.equals("1") && inTransit.equals("1")) { // لو جيت بطفي الترانزت واللي بعدها الدلفرد شغاله بطلع له مسج تقول ان لازم تشيل الدلفرد اول
-                    Toast.makeText(myCustomersDetails.this, "remove in transit first", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -424,31 +486,53 @@ if (processing.equals("0")) {
 
                     else if (shipped.equals("1"))  //  ضغط الدلفرد وهي ترانزت انور الضوء (الباث الصح
                     {
+
+
+
                         // لو الترانزت طافيه اشغلها
                         if (inTransit.equals("0")) {
-                            IvinTransit.setImageDrawable(getApplicationContext().getDrawable(R.drawable.intransit_status));
-                            inTransit = "1";
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                            ref.child(pid).child("inTransit").setValue(inTransit);
+
+
+                            AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(myCustomersDetails.this);
+                            // alertDialogBilder.setTitle("Log out");
+                            alertDialogBilder.setMessage("Are you sure you want to set order status is in transit" +
+                                    " you cant undo if you click yes ?")
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // close the dialog
+                                        }
+                                    })
+                                    .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int id) {
+
+                                            IvinTransit.setImageDrawable(getApplicationContext().getDrawable(R.drawable.intransit_status));
+                                            inTransit = "1";
+                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                                            ref.child(pid).child("inTransit").setValue(inTransit);
+
+                                        }
+                                    });
+
+
+                            AlertDialog alertDialog = alertDialogBilder.create();
+                            alertDialog.show();
+
                         }
+
+
+
 
 
 
                     }
 
 // لو الترانز
-                }else  //لكن لازم الدلفرد تكون طافيه  لو شغاله الترانزت اطفيها
-                if (inTransit.equals("1") && delivered.equals("0")) {
-                    IvinTransit.setImageDrawable(getApplicationContext().getDrawable(R.drawable.gray));
-                    inTransit = "0";
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                    ref.child(pid).child("inTransit").setValue(inTransit);
-                }
+                } //لكن لازم الدلفرد تكون طافيه  لو شغاله الترانزت اطفيها
 
-                if (inTransit.equals("1") && delivered.equals("1")) { // لو جيت بطفي الترانزت واللي بعدها الدلفرد شغاله بطلع له مسج تقول ان لازم تشيل الدلفرد اول
-                    Toast.makeText(myCustomersDetails.this, "remove delivered first", Toast.LENGTH_SHORT).show();
 
-                }
             }
         });
 
@@ -483,10 +567,42 @@ if (processing.equals("0")) {
                             {
 
                                 if (delivered.equals("0")) {
-                                    Ivdelivered.setImageDrawable(getApplicationContext().getDrawable(R.drawable.delivered__status));
-                                    delivered = "1";
-                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                                    ref.child(pid).child("delivered").setValue(delivered);
+
+
+
+                                    AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(myCustomersDetails.this);
+                                    // alertDialogBilder.setTitle("Log out");
+                                    alertDialogBilder.setMessage("Are you sure you want to set order status is delivered" +
+                                            " you cant undo if you click yes ?")
+                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // close the dialog
+                                                }
+                                            })
+                                            .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int id) {
+
+                                                    Ivdelivered.setImageDrawable(getApplicationContext().getDrawable(R.drawable.delivered__status));
+                                                    delivered = "1";
+                                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
+                                                    ref.child(pid).child("delivered").setValue(delivered);
+
+
+                                                }
+                                            });
+
+
+                                    AlertDialog alertDialog = alertDialogBilder.create();
+                                    alertDialog.show();
+
+
+
+
+
+
                                 }
 
 
@@ -495,12 +611,8 @@ if (processing.equals("0")) {
 
 
 // واخزن في الداتابيس القيمه الجديدة صفر و  الدلفرد مضاءة فاشيل الضوء مباشره لو ضغط
-                    }else  if (delivered.equals("1")){
-                            Ivdelivered.setImageDrawable(getApplicationContext().getDrawable(R.drawable.gray));
-                        delivered = "0";
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("soldBooks");
-                        ref.child(pid).child("delivered").setValue(delivered);
-                    }}
+                    }
+                    }
                 });
 
 

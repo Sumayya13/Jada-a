@@ -90,6 +90,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             myHolder.pDescriptionTv.setText("  "+pPrice+" SAR");
 
 
+/*
         // to show user info
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users").child(uid);
@@ -117,6 +118,8 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         });
 
 
+
+ */
 
         myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,9 +353,9 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             super(itemView);
 
             //init views
-            uPictureIv = itemView.findViewById(R.id.uPictureIv);
+            //uPictureIv = itemView.findViewById(R.id.uPictureIv);
             pImageIv = itemView.findViewById(R.id.pImageIv);
-            uNameTv = itemView.findViewById(R.id.uNameTv);
+           // uNameTv = itemView.findViewById(R.id.uNameTv);
             pTimeTv = itemView.findViewById(R.id.pTimeTv);
             pTitle = itemView.findViewById(R.id.pTitle);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);

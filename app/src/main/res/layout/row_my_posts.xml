@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="13dp"
-    app:cardElevation="3dp"
-    android:padding="5dp"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="1dp"
+    android:padding="1dp"
     android:layout_margin="5dp"
     app:cardUseCompatPadding="true"
     app:cardBackgroundColor="@android:color/white"
@@ -18,47 +18,34 @@
         >
 
 
-
-
-
-
         <LinearLayout
+            android:paddingTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/uPictureIv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/user1"
-                android:layout_margin="5dp"
-                android:scaleType="centerCrop">
-        </de.hdodenhof.circleimageview.CircleImageView>
-
-            <LinearLayout
-                android:layout_width="272dp"
-                android:layout_height="46dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+            android:gravity="center_horizontal">
 
 
-                <TextView
-                    android:id="@+id/uNameTv"
-                    android:layout_width="218dp"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"></TextView>
 
                 <TextView
                     android:id="@+id/pTimeTv"
+                    android:gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="33 min"></TextView>
+                    android:layout_marginStart="20dp"
+                    android:text="24-Nov-2020 06:35"
+                    android:layout_marginLeft="10dp"></TextView>
 
-            </LinearLayout>
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="end"
+    >
+
 
             <ImageButton
                 android:id="@+id/moreBtn"
@@ -75,11 +62,11 @@
                 android:layout_height="25dp"
                 android:layout_marginEnd="13dp"
                 android:layout_marginRight="13dp"
-                android:background="@drawable/ic_baseline_edit_24"
+                android:background="@drawable/edit"
                 android:paddingLeft="10dp"></ImageButton>
 
         </LinearLayout>
-
+        </LinearLayout>
 
 
         <LinearLayout
@@ -91,8 +78,8 @@
 
             <ImageView
                 android:id="@+id/pImageIv"
-                android:layout_width="138dp"
-                android:layout_height="203dp"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"

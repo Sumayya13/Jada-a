@@ -222,6 +222,9 @@ public class PaypalActivity extends AppCompatActivity {
         {
             if (resultCode == RESULT_OK) {
 
+
+
+
                 PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirmation != null) {
                     try { // اودي مشتري كتاب لصفحة تعرض النتيجة
@@ -240,6 +243,47 @@ public class PaypalActivity extends AppCompatActivity {
 
                         // خزنت آي دي البائع
                         ref.child(pid).child("sellerID").setValue(sellerID);
+
+
+
+                        // لو احد شرا الكتاب بزيد كاونتر الكتب المباعة عند البائع
+                        //  final FirebaseUser thisUser1 = FirebaseAuth.getInstance().getCurrentUser();// to show other post
+                        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference ref2 = database.getReference("users").child(sellerID);
+                        final boolean[] flag = {true};
+                        // Attach a listener to read the data at our posts reference
+                        ref2.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                // count num of all books
+                                if (flag[0]) {
+                                    if (dataSnapshot.getValue() != null) {
+                                        User user = dataSnapshot.getValue(User.class);
+
+                                        String numSoldBooks = user.getNumPayedSoldBooks();
+                                        int numSoldBooksInt = Integer.valueOf(numSoldBooks);
+                                        numSoldBooksInt = numSoldBooksInt + 1;
+
+
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+                                        ref.child(sellerID).child("numPayedSoldBooks").setValue(String.valueOf(numSoldBooksInt));
+                                        flag[0] = false;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+
+
+
+
+
                         //خزنت آي دي المشتري
                         ref.child(pid).child("purchaserID").setValue(thisUser.getUid());
 
@@ -273,7 +317,8 @@ public class PaypalActivity extends AppCompatActivity {
                         hashMap.put("uri", uri);
                         hashMap.put("BookEdition", edition);
                         hashMap.put("BookAuthor", pAuth );
-
+                        hashMap.put("TotalPayment", String.valueOf(total) );
+                        hashMap.put("Resale", "0" );
 
 
                         //--------------view profile-----------------
@@ -311,6 +356,8 @@ public class PaypalActivity extends AppCompatActivity {
                         DatabaseReference ref1_= FirebaseDatabase.getInstance().getReference("soldBooks");
                         ref1_.child(pid).setValue(hashMap);
                         // اخزن في الداتابيس آي دي الكتاب و البائع والمشتري
+
+
 
 
                         startActivity(new Intent(this, PaymentDetails.class)

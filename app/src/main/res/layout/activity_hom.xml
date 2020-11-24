@@ -15,6 +15,9 @@
         android:layout_height="match_parent"
         android:background="@drawable/home">
 
+
+        <!--  Recycler view -->
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -22,14 +25,22 @@
             android:theme="@style/AppTheme1"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/menu_24"
             app:titleTextColor="#FFFFFF"
-            tools:ignore="MissingConstraints" />
 
 
-        <!--  Recycler view -->
+            tools:ignore="MissingConstraints">
+
+         <ImageView
+             android:id="@+id/noty"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:background="@drawable/bell"/>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
