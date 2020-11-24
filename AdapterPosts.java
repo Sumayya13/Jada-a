@@ -13,27 +13,40 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.jadaa.FavoriteActivity;
+import com.example.jadaa.PostDetail;
 import com.example.jadaa.R;
+import com.example.jadaa.User;
 import com.example.jadaa.ViewMyPostActivity;
 import com.example.jadaa.ViewPostActivity;
 import com.example.jadaa.models.ModelPost;
-import com.example.jadaa.postDetailActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
 
-   // String uid,pTitle,pDescription,pAuthor,pEdition,pImage,pPrice,pStatus,pCollege,pDate,pTime,pPublisher;
+
+
+    // String uid,pTitle,pDescription,pAuthor,pEdition,pImage,pPrice,pStatus,pCollege,pDate,pTime,pPublisher;
     Context context;
     List<ModelPost> postList;
-
+    public boolean likechecker=false;
+    private static DatabaseReference likeRef;
 
     public AdapterPosts(Context context, List<ModelPost> postList) {
         this.context = context;
         this.postList = postList;
-
     }
+
 
     @NonNull
     @Override
@@ -44,7 +57,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyHolder myHolder, int i) {
          //get data
         final String uid = postList.get(i).getUid();
         final String pId = postList.get(i).getpId();
@@ -59,22 +72,120 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         final String pDate = postList.get(i).getPostDate();
         final String pTime = postList.get(i).getPostTime();
         final String pPublisher = postList.get(i).getPublisher();
+        final DatabaseReference firebaseDatabase=FirebaseDatabase.getInstance().getReference("Posts");
+         String Postkay=firebaseDatabase.getKey();
+String pkey=pId;
+
         //set data
-        myHolder.uNameTv.setText(pPublisher);
         myHolder.pTimeTv.setText(pDate+" "+pTime);
         myHolder.pTitle.setText(pTitle);
 
+
+
+
+
+// to show user info
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(uid);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    String name =user.getFullName() ;
+
+                    myHolder.uNameTv.setText(name);
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+        final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        myHolder.likeBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                likechecker=true;
+                likeRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String CuserID=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        if (dataSnapshot.child(pId).hasChild(CuserID)){
+                            myHolder.likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24);
+
+                        }else {
+                            myHolder.likeBtn.setImageResource(R.drawable.ic_baseline_favorite_border_50);
+                            likeRef.removeValue();
+                        }
+                        if (likechecker==true){
+                        if (dataSnapshot.child(pId).hasChild(firebaseUser.getUid())){
+                            likeRef.child(pId).child(firebaseUser.getUid()).removeValue();
+                            likechecker=false;
+                        }else {
+                            likeRef.child(pId).child(firebaseUser.getUid()).setValue(true);
+                            likechecker=false;
+                        }}
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
 
         if (pPrice.equals("0"))
             myHolder.pDescriptionTv.setText("Book is free");
         else
             myHolder.pDescriptionTv.setText(pPrice+" SAR");
 
+        myHolder.shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String value = "الآن يمكنك الحصول على كتاب/ملزمة"+pTitle+"وبسعر"+pPrice+"سارع بالحصول عليه";
+                intent.putExtra(Intent.EXTRA_TEXT,value);
+                context.startActivity(intent.createChooser(intent,"share via"));
+            }
+        });
 
-       //  myHolder.pImageIv.setImageURI(Uri.parse(pImage));
+        myHolder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // move data to ViewPostActivity page to view
+                Intent viewSingle = new Intent(context, PostDetail.class);
+                viewSingle.putExtra("pTitle", pTitle);
+                viewSingle.putExtra("pImage",pImage);
+                viewSingle.putExtra("pDescription", pDescription);
+                viewSingle.putExtra("pAuthor", pAuthor);
+                viewSingle.putExtra("pEdition", pEdition);
+                viewSingle.putExtra("pPrice", pPrice);
+                viewSingle.putExtra("pStatus", pStatus);
+                viewSingle.putExtra("pCollege", pCollege);
+                viewSingle.putExtra("pDate", pDate);
+                viewSingle.putExtra("pTime", pTime);
+                viewSingle.putExtra("pPublisher", pPublisher);
+                viewSingle.putExtra("uid", uid);
+                viewSingle.putExtra("postId", pId);
 
-        //set post image
-        //String url = pImage;
+                context.startActivity(viewSingle);
+            }
+        });
+
         myHolder.pTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,9 +208,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
                 context.startActivity(viewSingle);
             }
         });
-
-
-
 
         myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +257,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
         });
 
 
-
         try{
             //  Picasso.get().load(pImage).into(myHolder.pImageIv);
             Picasso.get().load(pImage).into(myHolder.pImageIv);
@@ -174,10 +281,12 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
     class MyHolder extends RecyclerView.ViewHolder{
 
         //views from row_posts.xml
-        ImageView uPictureIv, pImageIv,commentIV;
+        ImageView uPictureIv, pImageIv;
         TextView uNameTv, pTimeTv, pTitle, pDescriptionTv;
-        ImageButton moreBtn;
-        ImageButton favoriteBtn, commentBtn, shareBtn;
+        ImageButton moreBtn,likeBtn,shareBtn;
+
+        DatabaseReference LikeRef;
+        Button favoriteBtn, commentBtn ;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -190,12 +299,15 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
             pTitle = itemView.findViewById(R.id.pTitle);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-            commentBtn=itemView.findViewById(R.id.goToCommentPage);
-
-
-
+            commentBtn = itemView.findViewById(R.id.commentBtn1);
+            likeBtn=itemView.findViewById(R.id.favoraiteBtn);
+            likeRef=FirebaseDatabase.getInstance().getReference().child("fav");
+            shareBtn=itemView.findViewById(R.id.SharaBtn);
         }
 
+
+
     }
+
 
 }//adapter class
