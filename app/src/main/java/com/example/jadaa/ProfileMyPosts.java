@@ -59,6 +59,7 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
@@ -106,6 +107,10 @@ public class ProfileMyPosts extends AppCompatActivity {
     //
     String ProfileOrCoverPhoto ;
 
+    EditText editText;
+
+    private static final Pattern PHONE_PATTERN= Pattern.compile("^[+]?[0-9]{10,13}$");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,41 +126,41 @@ public class ProfileMyPosts extends AppCompatActivity {
         final TextView nameTv,emailTv,phoneTv,freeBooks,payedBooks,allPost;
         FloatingActionButton fab;
 
-            // init firebase
-            firebaseAuth = FirebaseAuth.getInstance();
-            user = firebaseAuth.getCurrentUser();
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference("users");
+        // init firebase
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("users");
 
-            storageReference = getInstance().getReference(); //
+        storageReference = getInstance().getReference(); //
 
         //init permissions arrays
         cameraPermission= new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission= new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 
-            // inti views
-            avatarIv = findViewById(R.id.avatarIv);
-            coverIv = findViewById(R.id.coverIv);
-            nameTv = findViewById(R.id.nameTv);
-            emailTv = findViewById(R.id.emailTv);
-            phoneTv = findViewById(R.id.phoneTv);
-           // freeBooks=findViewById(R.id.numFreeSoldPost);
-            payedBooks = findViewById(R.id.numPayedPost);
-            allPost = findViewById(R.id.numPosts);
-            fab = findViewById(R.id.fab);
+        // inti views
+        avatarIv = findViewById(R.id.avatarIv);
+        coverIv = findViewById(R.id.coverIv);
+        nameTv = findViewById(R.id.nameTv);
+        emailTv = findViewById(R.id.emailTv);
+        phoneTv = findViewById(R.id.phoneTv);
+        // freeBooks=findViewById(R.id.numFreeSoldPost);
+        payedBooks = findViewById(R.id.numPayedPost);
+        allPost = findViewById(R.id.numPosts);
+        fab = findViewById(R.id.fab);
 
 
-            pd = new ProgressDialog(this); /// ///////////
+        pd = new ProgressDialog(this); /// ///////////
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /*---------------------Hooks------------------------*/
         navigationView = findViewById(R.id.nav_view );
         drawerLayout = findViewById(R.id.drawer_layout );
-   //     toolbar = findViewById(R.id.toolbar);
+        //     toolbar = findViewById(R.id.toolbar);
 
-       linearLayout = findViewById(R.id.NoOrder);
+        linearLayout = findViewById(R.id.NoOrder);
 
         /*---------------------Recycle view ------------------------*/
         //recyclerView = findViewById(R.id.post_list);
@@ -172,122 +177,79 @@ public class ProfileMyPosts extends AppCompatActivity {
 
         //init  post list
         postList = new ArrayList<>();
-
-
-
-        FirebaseAuth firebaseAuth;
-        FirebaseUser user;
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        // path of all posts
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
-
-        Query query = ref.orderByChild("uid").equalTo(user.getUid());
-        //get all from this
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                postList.clear();
-                for (DataSnapshot ds: snapshot.getChildren() ){
-
-                    linearLayout.setVisibility(View.INVISIBLE);
-                    ModelMyPost modelMyPost = ds.getValue(ModelMyPost.class);
-                    postList.add(modelMyPost);
-                    //adapter
-                    adapterPosts = new AdapterMyPosts(ProfileMyPosts.this, postList);
-                    //set adapter to recycler view
-                    recyclerView.setAdapter(adapterPosts);
-                    adapterPosts.notifyDataSetChanged();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //in case of error
-                Toast.makeText(ProfileMyPosts.this,""+error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-
-
         loadPosts();
 
 
 
         // Get a reference to our posts
-            final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref2 = database.getReference("users").child(thisUser.getUid());
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(thisUser.getUid());
 
-            // Attach a listener to read the data at our posts reference
-            ref2.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if (dataSnapshot.getValue() != null) {
+                if (dataSnapshot.getValue() != null) {
 
-                        User user = dataSnapshot.getValue(User.class);
+                    User user = dataSnapshot.getValue(User.class);
 
-                        String name =user.getFullName() ;
-                        String phone = user.getPhone() ;
-                        String email = user.getEmail() ;
-                        String image = user.getImage() ;
-                        String cover = user.getCover() ;
+                    String name =user.getFullName() ;
+                    String phone = user.getPhone() ;
+                    String email = user.getEmail() ;
+                    String image = user.getImage() ;
+                    String cover = user.getCover() ;
 
-                        String freeAdded = user.getNumFreeBooks() ;
-                        String freeSold = user.getNumFreeSoldBooks() ;
+                    String freeAdded = user.getNumFreeBooks() ;
+                    String freeSold = user.getNumFreeSoldBooks() ;
 
-                        String payedAdded = user.getNumPayedSoldBooks() ; // هذه اللي بتنعرض في البروفايل عدد الكتب اللي شريتها
-                        String payedSold = user.getNumPayedSoldBooks() ;
-                        String all = user.getNumAllBooks() ;
+                    String payedAdded = user.getNumPayedSoldBooks() ; // هذه اللي بتنعرض في البروفايل عدد الكتب اللي شريتها
+                    String payedSold = user.getNumPayedSoldBooks() ;
+                    String all = user.getNumAllBooks() ;
 
-                        nameTv.setText(name);
-                        emailTv.setText(email);
-                        phoneTv.setText(phone);
+                    nameTv.setText(name);
+                    emailTv.setText(email);
+                    phoneTv.setText(phone);
 
-                        //freeBooks.setText(freeAdded);
-                        payedBooks.setText(payedAdded);
-                        allPost.setText(all);
-
-
-                        try{
-                            // if image is resived then set
-                            Picasso.get().load(image).into(avatarIv);
-                        }
-                        catch (Exception e){
-                            Picasso.get().load(R.drawable.ic_baseline_add_a_photo_24).into(avatarIv);
-                        }
-
-                        try{
-                            // if image is resived then set
-                            Picasso.get().load(cover).into(coverIv);
-                        }
-                        catch (Exception e){
-
-                        }
+                    //freeBooks.setText(freeAdded);
+                    payedBooks.setText(payedAdded);
+                    allPost.setText(all);
 
 
+                    try{
+                        // if image is resived then set
+                        Picasso.get().load(image).into(avatarIv);
+                    }
+                    catch (Exception e){
+                        Picasso.get().load(R.drawable.ic_baseline_add_a_photo_24).into(avatarIv);
+                    }
+
+                    try{
+                        // if image is resived then set
+                        Picasso.get().load(cover).into(coverIv);
+                    }
+                    catch (Exception e){
 
                     }
 
-                }        @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
 
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showEditProfileDialog();
                 }
-            });
+
+            }        @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditProfileDialog();
+            }
+        });
 
 
 
@@ -312,29 +274,29 @@ public class ProfileMyPosts extends AppCompatActivity {
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-          if (which==0)
-          {
-              pd.setMessage("Updating Profile Picture");
-              ProfileOrCoverPhoto = "image";
-              showImagePicDialoge();
+                if (which==0)
+                {
+                    pd.setMessage("Updating Profile Picture");
+                    ProfileOrCoverPhoto = "image";
+                    showImagePicDialoge();
 
-          }else if (which==1)
-          {// cover
-              pd.setMessage("Updating Cover Photo");
-              ProfileOrCoverPhoto = "cover";
-              showImagePicDialoge();
+                }else if (which==1)
+                {// cover
+                    pd.setMessage("Updating Cover Photo");
+                    ProfileOrCoverPhoto = "cover";
+                    showImagePicDialoge();
 
-          }else if (which==2)
-          {// name
-              pd.setMessage("Updating Name");
-              showNamePhoneUpdateDialoge("name");
+                }else if (which==2)
+                {// name
+                    pd.setMessage("Updating Name");
+                    showNamePhoneUpdateDialoge("name");
 
-          }else if (which==3)
-          {// phone
-              pd.setMessage("Updating Phone");
-              showNamePhoneUpdateDialoge("phone");
+                }else if (which==3)
+                {// phone
+                    pd.setMessage("Updating Phone");
+                    showNamePhoneUpdateDialoge("phone");
 
-          }
+                }
 
             }
 
@@ -345,8 +307,8 @@ public class ProfileMyPosts extends AppCompatActivity {
 
 
     private void showNamePhoneUpdateDialoge(final String key) {
-AlertDialog.Builder builder = new AlertDialog.Builder(this);
-builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
 
 
 
@@ -358,7 +320,7 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setPadding(10,10,10,10);
         // add edit text
-        final EditText editText = new EditText( this);
+        editText = new EditText( this);
         editText.setHint("Enter "+key);
         linearLayout.addView(editText);
 
@@ -372,18 +334,31 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
                 String value = editText.getText().toString().trim();
                 if (!TextUtils.isEmpty(value)){
 
-
-
                     pd.show();
-                   HashMap<String ,Object> result = new HashMap<>();
+                    HashMap<String ,Object> result = new HashMap<>();
 
-                   if (key.equals("name"))
-                   result.put("fullName",value);
-                   else result.put("phone",value);
+                 /*  if(key.equals("name")&&!validateName(value) || key.equals("phone")&&!validatePhone(value)){
+                       Toast.makeText(ProfileMyPosts.this,"Please enter a valid "+key,Toast.LENGTH_SHORT).show();
+                   } */
+                    if (key.equals("name") && validateName(value)) {
+                        result.put("fullName", value);
+                        pd.dismiss();
+                        Toast.makeText(ProfileMyPosts.this, "Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (key.equals("phone") && validatePhone(value)){
+                        result.put("phone",value);
+                        pd.dismiss();
+                        Toast.makeText(ProfileMyPosts.this, "Updated", Toast.LENGTH_SHORT).show();
+                    }
 
+                    databaseReference.child(user.getUid()).updateChildren(result);
 
-                   databaseReference.child(user.getUid()).updateChildren(result)
-                   .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    if(key.equals("name")&&!validateName(value) || key.equals("phone")&&!validatePhone(value)){
+                        pd.dismiss();
+                        Toast.makeText(ProfileMyPosts.this,"Please enter a valid "+key,Toast.LENGTH_SHORT).show();
+                    }
+
+                 /*  .addOnSuccessListener(new OnSuccessListener<Void>() {
                        @Override
                        public void onSuccess(Void aVoid) {
 
@@ -398,9 +373,17 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
                            pd.dismiss();
                            Toast.makeText(ProfileMyPosts.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
                        }
-                   });
+                   }); */
 
-                }else Toast.makeText(ProfileMyPosts.this,"Please enter "+key,Toast.LENGTH_SHORT).show();
+                }
+                //sumayya check
+                /*else if(key.equals("name")&&!validateName(value)){
+                    return;
+                }
+                else if(key.equals("phone")&&!validatePhone(value)){
+                    return;
+                } */
+                else Toast.makeText(ProfileMyPosts.this,"Please enter "+key,Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -460,7 +443,7 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-         switch(requestCode){
+        switch(requestCode){
             case CAMERA_REQUEST_CODE:{
                 if(grantResults.length>0){
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -510,7 +493,7 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
         startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
     }
 
-     private void pickFromGallery() {
+    private void pickFromGallery() {
         //intent to pick image from gallery
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -555,7 +538,7 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
 
             if(requestCode == IMAGE_PICK_GALLERY_CODE){
                 //image is picked from gallery, get uri from image
-              //  assert data != null;
+                //  assert data != null;
                 image_uri = data.getData();
 
                 // set to imageView
@@ -566,7 +549,7 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
             }
             else if(requestCode == IMAGE_PICK_CAMERA_CODE){
                 //image is picked from camera, get uri from image
-            //    imageIv.setImageURI(image_rui);
+                //    imageIv.setImageURI(image_rui);
 
                 uploadProfileCoverPhoto(image_uri);
 
@@ -601,14 +584,14 @@ builder.setTitle("Update "+key);  // ee.g apdate name apdate phone
                     databaseReference.child(user.getUid()).updateChildren(result).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-pd.dismiss();
+                            pd.dismiss();
                             Toast.makeText(ProfileMyPosts.this,"Image Updated....",Toast.LENGTH_SHORT).show();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-pd.dismiss();
+                            pd.dismiss();
                             Toast.makeText(ProfileMyPosts.this,"Error Updating Image...",Toast.LENGTH_SHORT).show();
 
                         }
@@ -649,7 +632,6 @@ pd.dismiss();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 postList.clear();
                 for (DataSnapshot ds: snapshot.getChildren() ){
 
@@ -661,7 +643,6 @@ pd.dismiss();
                     //set adapter to recycler view
                     recyclerView.setAdapter(adapterPosts);
                     adapterPosts.notifyDataSetChanged();
-
                 }
             }
 
@@ -672,6 +653,32 @@ pd.dismiss();
             }
         });
 
+    }
+
+    private boolean validateName(String text) {
+        if (text.length() > 20) {
+            editText.setError("Username is too long");
+            return false;
+        }
+        if (text.length() < 3) {
+            editText.setError("Username is too short");
+            return false;
+        }
+        else {
+            editText.setError(null);
+            return true;
+        }
+    }
+
+
+    public boolean validatePhone(String text){
+        if (!PHONE_PATTERN.matcher(text).matches()) {
+            editText.setError("Incorrect phone format");
+            return false;
+        } else {
+            editText.setError(null);
+            return true;
+        }
     }
 
 
