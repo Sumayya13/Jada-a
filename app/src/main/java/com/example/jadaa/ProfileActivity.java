@@ -248,9 +248,7 @@ String name ,phone1 ,email1; ///////////////////////////////////
                 Intent profile = new Intent(ProfileActivity.this, HomeActivity.class);
                 startActivity(profile); break;
             case R.id.nav_Profile: break;
-            case R.id.nav_MyPost:
-                Intent myPost = new Intent(ProfileActivity.this, MyPostActivity.class);
-                startActivity(myPost); break;
+
             case R.id.nav_order:  Intent profile1 = new Intent(ProfileActivity.this, MyOrderActivity.class);
                 startActivity(profile1); break;
             case R.id.nav_heart:

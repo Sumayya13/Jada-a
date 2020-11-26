@@ -103,7 +103,7 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
         // to change color when click on item
         navigationView.setNavigationItemSelectedListener(this);
         // send this page
-        navigationView.setCheckedItem(R.id.nav_MyPost);
+       // navigationView.setCheckedItem(R.id.nav_MyPost);
 
 
 
@@ -263,9 +263,9 @@ public class MyPostActivity extends AppCompatActivity implements NavigationView.
                 Intent profile = new Intent(MyPostActivity.this, HomeActivity.class);
                 startActivity(profile); break;
             case R.id.nav_Profile:
-                Intent profile1 = new Intent(MyPostActivity.this, ProfileActivity.class);
+                Intent profile1 = new Intent(MyPostActivity.this, ProfileMyPosts.class);
                 startActivity(profile1); break;
-            case R.id.nav_MyPost: break;
+            //case R.id.nav_MyPost: break;
             case R.id.nav_order:
                 Intent myOrder = new Intent(MyPostActivity.this, MyOrderActivity.class);
                 startActivity(myOrder); break;

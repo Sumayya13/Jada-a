@@ -34,7 +34,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -46,6 +48,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Toolbar toolbar;
     Menu menu;
+    ImageView noty ;
+    TextView noresults;
 
     RecyclerView recyclerView;
     List<ModelPost> postList;
@@ -60,6 +64,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+
+        noresults  = findViewById(R.id.noresults );
         /*---------------------Recycle view ------------------------*/
         // recyclerView = View.findViewById(R.id.post_list);
         recyclerView = findViewById(R.id.post_list);
@@ -83,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view );
         drawerLayout = findViewById(R.id.drawer_layout );
         setSupportActionBar(toolbar);
-
+        noty = findViewById(R.id.noty );
 
         /*---------------------Navigation------------------------*/
         navigationView.bringToFront();
@@ -96,7 +102,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
 
 
-
+        noty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewSingle = new Intent(HomeActivity.this, notification_Settings.class);
+                startActivity(viewSingle);
+            }
+        });
 
         // if want to hide item of navigation
         /* menu = navigationView.getMenu();
@@ -150,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
+/*
     //method search later
     private void searchPosts(final String searchQuery){
         final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();// to show other post
@@ -166,20 +178,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
                     if(!modelPost.getUid().equals(thisUser.getUid()) ){
-                    if(modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getBookAuthor().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getCollege().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getPostDate().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getPostTime().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getPublisher().toLowerCase().contains(searchQuery.toLowerCase())||
-                            modelPost.getBookEdition().toLowerCase().contains(searchQuery.toLowerCase())||
-                            (searchQuery.toLowerCase().equals("free")&& modelPost.getBookPrice().toLowerCase().equals("0"))
+                        if(modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getBookAuthor().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getCollege().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getPostDate().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getPostTime().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getPublisher().toLowerCase().contains(searchQuery.toLowerCase())||
+                                modelPost.getBookEdition().toLowerCase().contains(searchQuery.toLowerCase())||
+                                (searchQuery.toLowerCase().equals("free")&& modelPost.getBookPrice().toLowerCase().equals("0"))
 
-                    ){
+                        )
+                    {
                         postList.add(modelPost);
-                    }}
+                    }
+                    }
 
                     //adapter
                     adapterPosts = new AdapterPosts(HomeActivity.this,postList);
@@ -197,6 +211,72 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+
+
+ */
+
+
+    //method search later
+    private void searchPosts(final String searchQuery){
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();// to show other post
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+        //get all from this
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds: snapshot.getChildren() ){
+                    ModelPost modelPost = ds.getValue(ModelPost.class);
+
+
+
+                    if(!modelPost.getUid().equals(thisUser.getUid()) ){
+
+                        if(
+                                modelPost.getBookTitle().toLowerCase().contains(searchQuery.toLowerCase())
+
+
+                                        ||
+                        modelPost.getBookPrice().toLowerCase().contains(searchQuery.toLowerCase())
+
+
+                                        ||
+                                        modelPost.getBookAuthor().toLowerCase().contains(searchQuery.toLowerCase())
+
+                                        ||
+                                      
+                                        (searchQuery.toLowerCase().equals("free")&& modelPost.getBookPrice().toLowerCase().equals("0"))
+                            //  modelPost.getBookDescription().toLowerCase().contains(searchQuery.toLowerCase())
+                        )
+                        {
+                            postList.add(modelPost);
+                        }
+
+                    } else noresults.setVisibility(View.VISIBLE);
+
+                    //adapter
+                    adapterPosts = new AdapterPosts(HomeActivity.this,postList);
+                    //set adapter to recycler view
+                    recyclerView.setAdapter(adapterPosts);
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //in case of error
+                Toast.makeText(HomeActivity.this,""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,9 +319,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
-
     /*---------------------to Open or close Navigation ------------------------*/
     public void onBackPressed(){
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -258,11 +335,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.nav_home: break;
             case R.id.nav_Profile:
-                Intent profile = new Intent(HomeActivity.this, ProfileActivity.class);
+                Intent profile = new Intent(HomeActivity.this, ProfileMyPosts.class);
                 startActivity(profile); break;
-            case R.id.nav_MyPost:
-                Intent myPost = new Intent(HomeActivity.this, MyPostActivity.class);
-                startActivity(myPost); break;
+
             case R.id.nav_order:
                 Intent myOrder = new Intent(HomeActivity.this, MyOrderActivity.class);
                 startActivity(myOrder); break;

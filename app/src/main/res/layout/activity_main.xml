@@ -80,7 +80,7 @@
 
             <TextView
                 android:id="@+id/button"
-                android:layout_width="match_parent"
+                android:layout_width="217dp"
                 android:layout_height="47dp"
                 android:layout_gravity="center_vertical|center_horizontal|center"
                 android:layout_marginTop="30dp"
@@ -99,15 +99,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="horizontal">
 
+
+
                 <TextView
-                    android:id="@+id/register_textview"
+
+
+                  android:id="@+id/register_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="Sign up"
                     android:textColor="@color/white"
@@ -118,11 +125,12 @@
 
                 <TextView
                     android:id="@+id/forget_password_textview"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:gravity="end"
+                    android:layout_marginStart="10dp"
                     android:text="forgot password?"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"

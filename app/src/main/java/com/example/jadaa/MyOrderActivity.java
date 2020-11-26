@@ -192,11 +192,9 @@ public class MyOrderActivity extends AppCompatActivity implements NavigationView
                 Intent profile = new Intent(MyOrderActivity.this, HomeActivity.class);
                 startActivity(profile); break;
             case R.id.nav_Profile:
-                Intent profile1 = new Intent(MyOrderActivity.this, ProfileActivity.class);
+                Intent profile1 = new Intent(MyOrderActivity.this, ProfileMyPosts.class);
                 startActivity(profile1); break;
-            case R.id.nav_MyPost:
-                Intent myPost = new Intent(MyOrderActivity.this, MyPostActivity.class);
-                startActivity(myPost); break;
+
             case R.id.nav_order: break;
             case R.id.nav_heart:
                 Intent heart = new Intent(MyOrderActivity.this, FavoriteActivity.class);

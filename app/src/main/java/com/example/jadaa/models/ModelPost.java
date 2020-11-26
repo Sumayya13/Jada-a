@@ -9,15 +9,197 @@ public class ModelPost {
     String BookStatus;
     String BookTitle;
     String College;
+    String CommentCounter;
     String PostDate;
     String PostTime;
     String Publisher;
     String uid;
     String BookEdition;
     String pId;
-
+    String uEmail;
     String purchaseDate;
     String purchaseTime;
+    String BookID;
+    ModelComment Comment;
+
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, ModelComment comment, String pTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        Comment = comment;
+        this.pTime = pTime;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String commentCounter, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, String purchaseDate, String purchaseTime, String bookID, ModelComment comment, String pTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        CommentCounter = commentCounter;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+        BookID = bookID;
+        Comment = comment;
+        this.pTime = pTime;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String postDate, String postTime, String uid, String bookEdition, String pId, String bookID, String pTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        PostDate = postDate;
+        PostTime = postTime;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        BookID = bookID;
+        this.pTime = pTime;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String commentCounter, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, String purchaseDate, String purchaseTime, String bookID, String pTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        CommentCounter = commentCounter;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+        BookID = bookID;
+        this.pTime = pTime;
+    }
+
+    String pTime;
+
+    public String getuEmail() {
+        return uEmail;
+    }
+
+
+    public String getpTime() {
+        return pTime;
+    }
+
+    public void setpTime(String pTime) {
+        this.pTime = pTime;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String commentCounter, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, String purchaseDate, String purchaseTime, String bookID) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        CommentCounter = commentCounter;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+        BookID = bookID;
+    }
+
+    public String getBookID() {
+        return BookID;
+    }
+
+    public void setBookID(String bookID) {
+        BookID = bookID;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String commentCounter, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, String purchaseDate, String purchaseTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        CommentCounter = commentCounter;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+    }
+
+    public String getCommentCounter() {
+        return CommentCounter;
+    }
+
+    public void setCommentCounter(String commentCounter) {
+        CommentCounter = commentCounter;
+    }
+
+    public ModelPost(String bookAuthor, String bookDescription, String bookImage, String bookPrice, String bookStatus, String bookTitle, String college, String postDate, String postTime, String publisher, String uid, String bookEdition, String pId, String uEmail, String purchaseDate, String purchaseTime) {
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        BookImage = bookImage;
+        BookPrice = bookPrice;
+        BookStatus = bookStatus;
+        BookTitle = bookTitle;
+        College = college;
+        PostDate = postDate;
+        PostTime = postTime;
+        Publisher = publisher;
+        this.uid = uid;
+        BookEdition = bookEdition;
+        this.pId = pId;
+        this.uEmail = uEmail;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+    }
+
+    public void setuEmail(String uEmail) {
+        this.uEmail = uEmail;
+    }
+
+
 
     public String getPurchaseDate() {
         return purchaseDate;
@@ -45,12 +227,16 @@ public class ModelPost {
         College = college;
         PostDate = postDate;
         PostTime = postTime;
+        String pTime;
+        String purchaserID;
+        String sellerID;
         Publisher = publisher;
         this.uid = uid;
         BookEdition = bookEdition;
         this.pId = pId;
         this.purchaseDate = purchaseDate;
         this.purchaseTime = purchaseTime;
+
     }
 
 

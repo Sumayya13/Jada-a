@@ -28,10 +28,10 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
 
     ImageView TbookImage ,order_detail2 ,track;
-    TextView order_status ,order_dateT ,TBookTitle ,TbookPrice,confirm_order,order_detail,Tedition,Tauther_name,Tcollege,TorderID,orderStatus;
+    TextView TvpurchaserName ,TvpurchaserPhone ,order_status ,order_dateT ,TBookTitle ,TbookPrice,confirm_order,order_detail,Tedition,Tauther_name,Tcollege,TorderID,orderStatus,total;
 
-
-
+    ImageView uPictureIv;
+String sellerID;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +67,15 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         order_dateT= (TextView) findViewById(R.id.order_date);
         track =  findViewById(R.id.track);
         orderStatus =findViewById(R.id.status);
+        total=findViewById(R.id.total);
 
 
-        String title,des,price,pAuth,uid,pStatus,pImage,pid;
+        // seller not purchaserName ,purchaserPhone
+        TvpurchaserName = (TextView) findViewById(R.id.purchaserName);
+        TvpurchaserPhone = (TextView) findViewById(R.id.purchaserPhone);
+        uPictureIv = findViewById(R.id.uPictureIv);
+
+        String title,des,price,pAuth,uid,pStatus,pImage,pid,TotalPayment;
         String purchaseDate,purchaseTime, processing,shipped,inTransit,delivered,uri,BookPrice,BookTitle,BookAuthor,BookEdition;
 
         final Bundle extras = getIntent().getExtras();
@@ -86,13 +92,15 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
         BookPrice =extras.getString("BookPrice");
         BookAuthor = extras.getString("BookAuthor");
         BookEdition =  extras.getString("BookEdition");
-
+        TotalPayment=  extras.getString("TotalPayment");
+        sellerID = extras.getString("sellerID");
 
         TorderID.setText("#"+pid);  // يشتغل
         order_dateT.setText( purchaseDate+" "+purchaseTime); // يشتغل
         TBookTitle.setText(BookTitle);
         Tedition.setText("Edition "+BookEdition);
         Tauther_name.setText(BookAuthor);
+        total.setText("$ "+TotalPayment);
 
         try{
             Picasso.get().load(uri).into(TbookImage);
@@ -107,6 +115,41 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
         //orderIDT.setText("#"+pid);
 
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(sellerID);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    String name =user.getFullName() ;
+                    String phone1 = user.getPhone() ;
+                    String image = user.getImage();
+
+                    try{
+                        if (image!= null || image!= ""||image!= " " )
+                            Picasso.get().load(user.getImage()).into(uPictureIv);
+                    }
+                    catch (Exception e){
+                        uPictureIv.setImageDrawable(getDrawable(R.drawable.user1));
+                    }
+
+
+                    TvpurchaserName.setText(user.getFullName());
+                    TvpurchaserPhone.setText(user.getPhone());
+                    // System.out.println(post);
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
 
 
@@ -114,26 +157,26 @@ public class MyOrderDetailsActivity extends AppCompatActivity {
 
         if (delivered.equals("1"))// not delivered yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.all));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.allstat2_removebg_preview));
             orderStatus.setText("delivered");
         }else
         if (inTransit.equals("1"))  // not in Transit yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_home));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.totransit2_removebg_preview));
             orderStatus.setText("inTransit");
         }else
         if (shipped.equals("1"))  // not shipped yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_in_transit));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.ship2));
             orderStatus.setText("shipped");
         }else
 
         if (processing.equals("1"))  // not shipped yet
         {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_shipped));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.proc2));
             orderStatus.setText("processing");
         } else {
-            track.setImageDrawable(getResources().getDrawable(R.drawable.without_processing));
+            track.setImageDrawable(getResources().getDrawable(R.drawable.order2));
             orderStatus.setText("Ordered");
         }
 

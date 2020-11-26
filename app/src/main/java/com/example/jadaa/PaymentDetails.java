@@ -34,13 +34,15 @@ public class PaymentDetails extends AppCompatActivity {
         txtId = (TextView)findViewById(R.id.txtId);
         txtAmount = (TextView)findViewById(R.id.txtAmount);
         txtStatus = (TextView)findViewById(R.id.txtStatus);
-        editProfile = (TextView)findViewById(R.id.editProfile);
+    //    editProfile = (TextView)findViewById(R.id.editProfile);
         moveMyOrder = (TextView)findViewById(R.id.moveMyOrder);
         imageMyOrder = (ImageView)findViewById(R.id.imageMyOrder);
-        imageprofile = (ImageView)findViewById(R.id.imageprofile);
-        homeIv =(ImageView)findViewById(R.id.homeIv);
-        homeTv = (TextView)findViewById(R.id.homeTv);
+    //    imageprofile = (ImageView)findViewById(R.id.imageprofile);
+    //    homeIv =(ImageView)findViewById(R.id.homeIv);
+    //    homeTv = (TextView)findViewById(R.id.homeTv);
 
+
+     /*
         homeIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +75,7 @@ public class PaymentDetails extends AppCompatActivity {
             }
         });
 
+        */
         imageMyOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

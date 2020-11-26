@@ -170,11 +170,9 @@ public class MyCustomersActivity extends AppCompatActivity implements Navigation
                 Intent profile = new Intent(MyCustomersActivity.this, HomeActivity.class);
                 startActivity(profile); break;
             case R.id.nav_Profile:
-                Intent profile1 = new Intent(MyCustomersActivity.this, ProfileActivity.class);
+                Intent profile1 = new Intent(MyCustomersActivity.this, ProfileMyPosts.class);
                 startActivity(profile1); break;
-            case R.id.nav_MyPost:
-                Intent myPost = new Intent(MyCustomersActivity.this, MyPostActivity.class);
-                startActivity(myPost); break;
+
             case R.id.nav_order:
                 Intent myOrder = new Intent(MyCustomersActivity.this, MyOrderActivity.class);
                 startActivity(myOrder); break;

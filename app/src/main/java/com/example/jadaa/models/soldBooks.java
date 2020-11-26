@@ -14,11 +14,17 @@ public class soldBooks {
     String sellerID;
     String shipped;
     String orderConfirmation;
+    String Resale;
     String uri;
     String BookEdition;
     String purchaserName;
+    String TotalPayment;
+    String BookID;
+    String purchaserPhone;
+    String purchaserEmail;
+    String BookAuthor;
 
-    public soldBooks(String bookPrice, String bookTitle, String delivered, String inTransit, String pId, String processing, String purchaseDate, String purchaseTime, String purchaserID, String sellerID, String shipped, String orderConfirmation, String uri, String bookEdition, String purchaserName, String purchaserPhone, String purchaserEmail, String bookAuthor) {
+    public soldBooks(String bookPrice, String bookTitle, String delivered, String inTransit, String pId, String processing, String purchaseDate, String purchaseTime, String purchaserID, String sellerID, String shipped, String orderConfirmation, String resale, String uri, String bookEdition, String purchaserName, String totalPayment, String bookID, String purchaserPhone, String purchaserEmail, String bookAuthor, String bookDescription, String college) {
         BookPrice = bookPrice;
         BookTitle = bookTitle;
         this.delivered = delivered;
@@ -31,16 +37,78 @@ public class soldBooks {
         this.sellerID = sellerID;
         this.shipped = shipped;
         this.orderConfirmation = orderConfirmation;
+        Resale = resale;
         this.uri = uri;
         BookEdition = bookEdition;
         this.purchaserName = purchaserName;
+        TotalPayment = totalPayment;
+        BookID = bookID;
+        this.purchaserPhone = purchaserPhone;
+        this.purchaserEmail = purchaserEmail;
+        BookAuthor = bookAuthor;
+        BookDescription = bookDescription;
+        College = college;
+    }
+
+    String BookDescription;
+    String College;
+
+    public String getCollege() {
+        return College;
+    }
+
+    public void setCollege(String college) {
+        College = college;
+    }
+
+    public String getBookDescription() {
+        return BookDescription;
+    }
+
+    public void setBookDescription(String bookDescription) {
+        BookDescription = bookDescription;
+    }
+
+    public soldBooks(String bookPrice, String bookTitle, String delivered, String inTransit, String pId, String processing, String purchaseDate, String purchaseTime, String purchaserID, String sellerID, String shipped, String orderConfirmation, String resale, String uri, String bookEdition, String purchaserName, String totalPayment, String bookID, String purchaserPhone, String purchaserEmail, String bookAuthor) {
+        BookPrice = bookPrice;
+        BookTitle = bookTitle;
+        this.delivered = delivered;
+        this.inTransit = inTransit;
+        this.pId = pId;
+        this.processing = processing;
+        this.purchaseDate = purchaseDate;
+        this.purchaseTime = purchaseTime;
+        this.purchaserID = purchaserID;
+        this.sellerID = sellerID;
+        this.shipped = shipped;
+        this.orderConfirmation = orderConfirmation;
+        Resale = resale;
+        this.uri = uri;
+        BookEdition = bookEdition;
+        this.purchaserName = purchaserName;
+        TotalPayment = totalPayment;
+        BookID = bookID;
         this.purchaserPhone = purchaserPhone;
         this.purchaserEmail = purchaserEmail;
         BookAuthor = bookAuthor;
     }
 
-    String purchaserPhone;
-    String purchaserEmail;
+    public String getTotalPayment() {
+        return TotalPayment;
+    }
+
+    public void setTotalPayment(String totalPayment) {
+        this.TotalPayment = totalPayment;
+    }
+
+
+    public String getResale() {
+        return Resale;
+    }
+
+    public void setResale(String resale) {
+        Resale = resale;
+    }
 
 
     public String getPurchaserName() {
@@ -69,10 +137,6 @@ public class soldBooks {
 
 
 
-
-
-
-
     public String getBookEdition() {
         return BookEdition;
     }
@@ -89,7 +153,6 @@ public class soldBooks {
         BookAuthor = bookAuthor;
     }
 
-    String BookAuthor;
 
 
     public String getOrderConfirmation() {
@@ -203,10 +266,11 @@ public class soldBooks {
     }
 
 
+    public String getBookID() {
+        return BookID;
+    }
 
-
-
-
-
-
+    public void setBookID(String bookID) {
+        BookID = bookID;
+    }
 }

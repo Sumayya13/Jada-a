@@ -1,12 +1,15 @@
 package com.example.jadaa;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,9 +17,14 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jadaa.adapters.AdapterComments;
+import com.example.jadaa.adapters.AdapterPosts;
+import com.example.jadaa.models.ModelComment;
+import com.example.jadaa.models.ModelPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -44,15 +53,18 @@ public class PostDetail extends AppCompatActivity {
     private DatabaseReference userDbRef;
     private FirebaseAuth mAuth;
 
-    ImageView uPictureIv,pImageIv ;
-    TextView nameTv, pTimeTiv , pTitleTv ,pDescriptionTv ;
+    //ImageView uPictureIv,pImageIv ;
+   // TextView nameTv, pTimeTiv , pTitleTv ,pDescriptionTv ;
     EditText commentEt ;
     ImageButton sendBtn ;
     ImageView cAvatarIv ;
 
     ProgressDialog pd ;
 
-
+    RecyclerView recyclerView;
+    List<ModelComment> postList;
+    AdapterComments adapterPosts;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,23 +80,22 @@ public class PostDetail extends AppCompatActivity {
         postId = intent.getStringExtra("postId");
 
 
-        uPictureIv = findViewById(R.id.uPictureIv);
-        pImageIv = findViewById(R.id.pImageIv);
-        nameTv = findViewById(R.id.uNameTv);
-        pTimeTiv = findViewById(R.id.pTimeTv);
-        pTitleTv = findViewById(R.id.pTitle);
+       //uPictureIv = findViewById(R.id.uPictureIv);
+       // pImageIv = findViewById(R.id.pImageIv);
+       // nameTv = findViewById(R.id.uNameTv);
+       // pTimeTiv = findViewById(R.id.pTimeTv);
+       // pTitleTv = findViewById(R.id.pTitle);
 
-        pDescriptionTv = findViewById(R.id.pDescriptionTv);
+        // pDescriptionTv = findViewById(R.id.pDescriptionTv);
 
         commentEt = findViewById(R.id.commentEt);
         sendBtn = findViewById(R.id.sendBtn);
         cAvatarIv = findViewById(R.id.cAvatarIv);
-
+        linearLayout = findViewById(R.id.NoOrder);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // move to previous page using toolbar
-        getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +104,8 @@ public class PostDetail extends AppCompatActivity {
             }
         });
 
-        loadPostInfo();
+
+       // loadPostInfo();
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -102,11 +114,96 @@ public class PostDetail extends AppCompatActivity {
            }
        });
 
+        /*---------------------Recycle view ------------------------*/
+        // recyclerView = View.findViewById(R.id.post_list);
+        recyclerView = findViewById(R.id.post_list);
+        // LinearLayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(PostDetail.this);
+        //show news =t posts first , for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init  post list
+        postList = new ArrayList<>();
+        loadPosts();
+
+// to show user info
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users").child(thisUser.getUid());
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    //String name =user.getFullName() ;
+                    String image= user.getImage();
+
+                    try{
+                        if (image!= null || image!= ""||image!= " " )
+                            Picasso.get().load(user.getImage()).into(cAvatarIv);
+                    }
+                    catch (Exception e){
+                    cAvatarIv.setImageDrawable(getDrawable(R.drawable.user1));
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
 
     }// create
 
+
+    private void loadPosts() {
+        final FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comment");
+        //get all from this
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds: snapshot.getChildren() ){
+                   // linearLayout.setVisibility(View.INVISIBLE);
+
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    ModelComment modelPost = ds.getValue(ModelComment.class);
+
+                        postList.add(modelPost);
+                        //adapter
+                        adapterPosts = new AdapterComments(PostDetail.this, postList);
+                        //set adapter to recycler view
+                        recyclerView.setAdapter(adapterPosts);
+                        adapterPosts.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //in case of error
+                Toast.makeText(PostDetail.this,""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+/*
     private void loadPostInfo() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
         Query query = ref.orderByChild("pId").equalTo(postId);
@@ -181,6 +278,8 @@ public class PostDetail extends AppCompatActivity {
         });
     }
 
+    */
+
     private void postComment() {
 
         pd = new ProgressDialog(this);
@@ -251,6 +350,7 @@ public class PostDetail extends AppCompatActivity {
         hashMap.put("commentTime",saveCurrentTime);
         hashMap.put("timeStamp",timeStamp);
         hashMap.put("uid",myUid);
+        hashMap.put("pId",postId);
        //hashMap.put("uEmail",myEmail);
         //hashMap.put("uName",myName);
 

@@ -2,6 +2,7 @@ package com.example.jadaa.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jadaa.MainActivity;
@@ -47,6 +49,9 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
     private DatabaseReference databaseReference;
     private EditText nameEditText, passwordEditText, confirmPassEditText;
     private EditText phoneEditText, emailEditText;
+
+    ImageView  uPictureIv ;
+
     // Toolbar toolbar;
     // private String email ;
     // private static final String USERS = "users";
@@ -86,13 +91,17 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
         final String orderConfirmation = postList.get(i).getOrderConfirmation();
         final String BookAuthor = postList.get(i).getBookAuthor();
         final String BookEdition= postList.get(i).getBookEdition();
+        final String TotalPayment= postList.get(i).getTotalPayment();
+
 
         myHolder.Torder_ID.setText(pId);
 
         myHolder.TBookTitle.setText(BookTitle);
         myHolder.TbookAuther.setText(BookAuthor);
         myHolder.TbookEdition.setText("Edition "+BookEdition);
-        //myHolder.Torder_ID.setText(pId);
+
+
+
 
         if (BookPrice.equals("0"))
             myHolder.TbookPrice.setText("Book is free");
@@ -110,6 +119,7 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -118,9 +128,19 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
 
                  String name =user.getFullName() ;
                  String phone1 = user.getPhone() ;
+                 String image = user.getImage();
 
                  myHolder.TpurchaserName.setText(user.getFullName());
                  myHolder.TpurchaserPhone.setText(user.getPhone());
+
+                 try{
+                     if (image!= null || image!= ""||image!= " " )
+                         Picasso.get().load(user.getImage()).into(myHolder.uPictureIv);
+                 }
+                 catch (Exception e){
+                     myHolder.uPictureIv.setImageDrawable(context.getDrawable(R.drawable.user1));
+                 }
+
                  // System.out.println(post);
 
              }
@@ -186,6 +206,10 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
                 viewSingle.putExtra("purchaserID", purchaserID);
+                viewSingle.putExtra("TotalPayment", TotalPayment);
+                viewSingle.putExtra("isConfirmed", orderConfirmation);
+
+
                 //   viewSingle.putExtra("purchaserName", name);
 
               //  viewSingle.putExtra("purchaserPhone", phone1);
@@ -213,7 +237,10 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
                 viewSingle.putExtra("BookAuthor", BookAuthor);
                 viewSingle.putExtra("BookEdition", BookEdition);
                 viewSingle.putExtra("purchaserID", purchaserID);
-             //   viewSingle.putExtra("purchaserName", name);
+                viewSingle.putExtra("TotalPayment", TotalPayment);
+                viewSingle.putExtra("isConfirmed", orderConfirmation);
+
+                //   viewSingle.putExtra("purchaserName", name);
               //  viewSingle.putExtra("purchaserPhone", phone1);
                 context.startActivity(viewSingle);
             }
@@ -235,7 +262,7 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
 
         TextView Torder_ID;
         //views from row_posts.xml
-        ImageView processingT ,shippedT,in_transitT,deliveredT;
+        ImageView processingT ,shippedT,in_transitT,deliveredT ,  uPictureIv ;
         ImageView TbookImage ,Torder_detail2;
         TextView order_status ,TbookAuther,TbookEdition,order_date ,TBookTitle ,TbookPrice,Tconfirm_order,Torder_detail,TpurchaserName,TpurchaserPhone;
 
@@ -255,7 +282,7 @@ public class AdapterCustomers extends RecyclerView.Adapter<AdapterCustomers.MyHo
             TbookPrice = itemView.findViewById(R.id.bookPrice);
             Tconfirm_order = itemView.findViewById(R.id.confirm_order);
             Torder_detail = itemView.findViewById(R.id.order_detail);
-
+            uPictureIv = itemView.findViewById(R.id.uPictureIv);
 
         }
     }

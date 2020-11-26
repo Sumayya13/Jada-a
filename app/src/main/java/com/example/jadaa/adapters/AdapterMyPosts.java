@@ -90,6 +90,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             myHolder.pDescriptionTv.setText("  "+pPrice+" SAR");
 
 
+/*
         // to show user info
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users").child(uid);
@@ -117,6 +118,8 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         });
 
 
+
+ */
 
         myHolder.pImageIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +204,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
         catch (Exception e){
         }
 
-
+/*
 
 // strt delete post it's work
         myHolder.moreBtn.setOnClickListener(new View.OnClickListener() {
@@ -259,6 +262,58 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
 
 
         });// end delete post
+
+
+
+ */
+
+
+        myHolder.moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBilder = new AlertDialog.Builder(context);
+                //  alertDialogBilder.setTitle("Log out");
+                alertDialogBilder.setMessage("Are you sure you want to delete post?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close the dialog
+                            }
+                        })
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts").child(pId);
+
+                                final Query query= FirebaseDatabase.getInstance().getReference("Posts").child(pId);
+                               ref.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        for (DataSnapshot ds :dataSnapshot.getChildren())
+                                        {
+                                            ref.removeValue();
+
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                                Toast.makeText(context,"deleted successfully ",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                AlertDialog alertDialog = alertDialogBilder.create();
+                alertDialog.show();
+            }
+        });
+
 
         myHolder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,9 +405,9 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyHolder
             super(itemView);
 
             //init views
-            uPictureIv = itemView.findViewById(R.id.uPictureIv);
+            //uPictureIv = itemView.findViewById(R.id.uPictureIv);
             pImageIv = itemView.findViewById(R.id.pImageIv);
-            uNameTv = itemView.findViewById(R.id.uNameTv);
+           // uNameTv = itemView.findViewById(R.id.uNameTv);
             pTimeTv = itemView.findViewById(R.id.pTimeTv);
             pTitle = itemView.findViewById(R.id.pTitle);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);

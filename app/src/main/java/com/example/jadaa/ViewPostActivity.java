@@ -23,8 +23,11 @@ import android.widget.Toast;
 import com.example.jadaa.Config.Config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -114,6 +117,7 @@ public class ViewPostActivity extends AppCompatActivity {
         uid= extras.getString("uid");
 
 
+
         pTitle.setText( " "+extras.getString("pTitle"));
         pDescriptionTv.setText(" "+extras.getString("pDescription"));
         auther_name.setText(extras.getString("pAuthor"));
@@ -186,7 +190,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
                 String title = extras.getString("pTitle");
                 String des = extras.getString("pDescription");
-                String pid = extras.getString("pId");
+                final String pid = extras.getString("pId");
                 String pAuth =extras.getString("pAuthor");
                 String price =extras.getString("pPrice");
                 String pStatus = extras.getString("pStatus");
@@ -194,7 +198,9 @@ public class ViewPostActivity extends AppCompatActivity {
                 String pTime= extras.getString("pTime");
                 String uid= extras.getString("uid");
                 String uri =extras.getString("pImage");
+                String college11 =extras.getString("pCollege");
                 final String edition = extras.getString("pEdition");
+
 
 
                 if(!price.equals("0")){
@@ -210,7 +216,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     viewSingle.putExtra("pId", pid);
                     viewSingle.putExtra("pImage", uri);
                     viewSingle.putExtra("pEdition", edition);
-
+                    viewSingle.putExtra("pCollege", college11);
                     startActivity(viewSingle);
 
                     // when buy free book
@@ -247,7 +253,7 @@ public class ViewPostActivity extends AppCompatActivity {
                                     String uid1 = extras.getString("uid");
                                     String uri1 =extras.getString("pImage");
                                     String edition1 = extras.getString("pEdition");
-
+                                    String coll = extras.getString("pCollege");
 
                                     Intent viewSingle = new Intent(getApplicationContext(), MyOrderActivity.class);
                                     viewSingle.putExtra("pTitle", title1);
@@ -261,6 +267,7 @@ public class ViewPostActivity extends AppCompatActivity {
                                     viewSingle.putExtra("pId", pid1);
                                     viewSingle.putExtra("pImage", uri1);
                                     viewSingle.putExtra("pEdition", edition1);
+                                    viewSingle.putExtra("pCollege", coll);
                                     viewSingle.putExtra("isBookFree", "YES");
 
 
@@ -280,6 +287,8 @@ public class ViewPostActivity extends AppCompatActivity {
                                     ref.child(pid1).child("sellerID").setValue(sellerID);
                                     //خزنت آي دي المشتري
                                     ref.child(pid1).child("purchaserID").setValue(thisUser.getUid());
+                                    
+
 
                                     //Date & Time
                                     Calendar calFordDate = Calendar.getInstance();
@@ -308,12 +317,55 @@ public class ViewPostActivity extends AppCompatActivity {
                                     hashMap.put("pId", pid1);
                                     hashMap.put("orderConfirmation","0"); // 0 means false (not confirm yet)
                                     hashMap.put("uri", uri1);
+                                    hashMap.put("TotalPayment","0" );
+                                    hashMap.put("BookID",pid1);
+                                    hashMap.put("Resale", "0" );
+
+                                    hashMap.put("College",coll);
+                                    hashMap.put("BookDescription",des1);
+
+
 
 
                                     DatabaseReference ref1_= FirebaseDatabase.getInstance().getReference("soldBooks");
                                     ref1_.child(pid1).setValue(hashMap);
                                     // اخزن في الداتابيس آي دي الكتاب و البائع والمشتري
 
+
+
+                                    // لو احد شرا الكتاب بزيد كاونتر الكتب المباعة عند البائع
+                                    //  final FirebaseUser thisUser1 = FirebaseAuth.getInstance().getCurrentUser();// to show other post
+                                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref2 = database.getReference("users").child(sellerID);
+                                    final boolean[] flag = {true};
+                                    // Attach a listener to read the data at our posts reference
+                                    ref2.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                            // count num of all books
+                                            if (flag[0]) {
+                                                if (dataSnapshot.getValue() != null) {
+                                                    User user = dataSnapshot.getValue(User.class);
+
+                                                    String numSoldBooks = user.getNumFreeSoldBooks();
+                                                    int numSoldBooksInt = Integer.valueOf(numSoldBooks);
+                                                    numSoldBooksInt = numSoldBooksInt + 1;
+
+
+                                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+                                                    ref.child(sellerID).child("numFreeSoldBooks").setValue(String.valueOf(numSoldBooksInt));
+                                                    flag[0] = false;
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            System.out.println("The read failed: " + databaseError.getCode());
+                                        }
+                                    });
 
 
                                     Toast.makeText(ViewPostActivity.this, "The book has been requested successfully", Toast.LENGTH_SHORT).show();
